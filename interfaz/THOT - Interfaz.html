@@ -5,11 +5,52 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>provando bootstrap</title>
 		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<div class="container mt-5 text-center">
-			<h1 class="text-primary">Mi Primer Sitio con Bootstrap</h1>
-			<p class="lead">Si este texto sale centrado y con una bonita tipografía, ¡tu CSS funciona!</p>
-			<button class="btn btn-success">¡Botón de Bootstrap Funcional!</button>
-		</div>
+		<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema Académico</title>
+    <!-- Enlace a tu Bootstrap local -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Iniciar Sesión</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- El formulario simula la acción IniciarSesion() -->
+                        <form action="login_process.php" method="POST">
+                            
+                            <!-- Atributo: Cedula -->
+                            <div class="mb-3">
+                                <label for="cedula" class="form-label">Cédula de Identidad:</label>
+                                <input type="text" id="cedula" name="cedula" class="form-control" required placeholder="Ej. 1312345678">
+                            </div>
+
+                            <!-- Atributo: Contraseña -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña:</label>
+                                <input type="password" id="password" name="contrasena" class="form-control" required placeholder="Ingrese su clave">
+                            </div>
+
+                            <!-- Botón que ejecuta la acción -->
+                            <button type="submit" class="btn btn-primary w-100">Entrar al Sistema</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap al final -->
+    <script src="js/bootstrap.min.js"></script>
+
 		
 	</head>
 
