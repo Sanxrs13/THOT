@@ -1,0 +1,114 @@
+{
+  "usuarios": [
+    {
+      "tipo": "Estudiante",
+      "correo": "ana@mail.com",
+      "nombre": "Ana",
+      "contrasena": "1234"
+    },
+    {
+      "tipo": "Docente",
+      "correo": "luis@mail.com",
+      "nombre": "Luis",
+      "contrasena": "1234"
+    },
+    {
+      "tipo": "Director",
+      "correo": "dir@mail.com",
+      "nombre": "Diana",
+      "contrasena": "1234"
+    },
+    {
+      "tipo": "Coordinador",
+      "correo": "coord@mail.com",
+      "nombre": "Carlos",
+      "contrasena": "1234"
+    },
+    {
+      "tipo": "Admin",
+      "correo": "admin@mail.com",
+      "nombre": "Root",
+      "contrasena": "1234"
+    },
+    {
+      "tipo": "Estudiante",
+      "correo": "pepitotola@romero.com",
+      "nombre": "Antonio Tola",
+      "contrasena": "menoresde12"
+    }
+  ],
+  "espacios": [
+    {
+      "tipo": "Aula",
+      "codigo_edificio": "A",
+      "capacidad": 35,
+      "codigo_aula": 101
+    },
+    {
+      "tipo": "Laboratorio",
+      "codigo_edificio": "B",
+      "capacidad": 40,
+      "codigo_aula": 201,
+      "numero_maquinas": 25
+    },
+    {
+      "tipo": "Aula",
+      "codigo_edificio": "B016",
+      "capacidad": 30,
+      "codigo_aula": 101
+    }
+  ],
+  "materias": [
+    {
+      "nombre": "Programacion",
+      "carrera": "Sistemas",
+      "codigo": 1,
+      "usar_lab": true
+    },
+    {
+      "nombre": "Matematica",
+      "carrera": "Sistemas",
+      "codigo": 2,
+      "usar_lab": false
+    },
+    {
+      "nombre": "Progrmacion orientada a Objetos",
+      "carrera": "Software",
+      "codigo": 15,
+      "usar_lab": true
+    }
+  ],
+  "cursos": [
+    {
+      "paralelo": "A",
+      "semestre": "1",
+      "periodo": "2026-1"
+    },
+    {
+      "paralelo": "B",
+      "semestre": "3",
+      "periodo": "2026"
+    }
+  ],
+  "horarios": [
+    {
+      "periodo": "2026-1",
+      "hora_inicio": 8,
+      "hora_fin": 10
+    },
+    {
+      "periodo": "2026-1",
+      "hora_inicio": 9,
+      "hora_fin": 11
+    }
+  ],
+  "asignaciones": [
+    {
+      "docente": 1,
+      "materia": 1,
+      "curso": 1,
+      "horario": 0,
+      "espacio": 1
+    }
+  ]
+}
