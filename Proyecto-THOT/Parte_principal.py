@@ -145,7 +145,7 @@ class Materia:
         
 #curso
 class Curso:
-    def __init__(self, paralelo: str, semestre: str, peridodo: str):
+    def __init__(self, paralelo: str, semestre: str, periodo: str):
         if not paralelo.strip():
             raise ValueError("debe de ingresar el paralelo")
         if not semestre.strip():
@@ -154,19 +154,19 @@ class Curso:
             raise ValueError("debe de ingresar el periodo")
         self.paralelo = paralelo.strip()
         self.semestre = semestre.strip()
-        self.periodo = peridodo.strip()
+        self.periodo = periodo.strip()
         
 #horario
 class Horario:
-    def __init__(self, perido: str, horas_inicio: int, hora_fin: int):
-        if horas_inicio < 7:
+    def __init__(self, perido: str, hora_inicio: int, hora_fin: int):
+        if hora_inicio < 7:
             raise ValueError("las clases no pueden ser tan trempranas")
         if hora_fin > 19:
             raise ValueError("las clases no pueden ser tan tarde")
         if hora_fin <= horas_inicio:
             raise ValueError("la hora de fin debe ser mayor que la de inicio")
         self.periodo = perido.strip()
-        self.hora_inicio = horas_inicio
+        self.hora_inicio = hora_inicio
         self.hora_fin = hora_fin
 
     def duracion(self):
