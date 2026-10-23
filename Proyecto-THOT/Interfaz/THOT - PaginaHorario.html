@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THOT | Horarios</title>
+  <link rel="stylesheet" href="../estilo/THOT - PaginaHorario.css">
+</head>
+<body> 
+  <header class="encabezado">
+    <div class="lado_izquierdo">
+      <img src="../imagenes/logo_uleam_dorado.png" id="logo">
+      <h2 class="titulo_pagina">ULEAM</h2>
+    </div>
+    <div class="lado_izquierdo">
+      <img src="../imagenes/logo_thot.png" id="logo">
+      <H2 id="titulo_pagina"><strong>THOT</strong> </H2>
+    </div>
+  </header>
+
+  <div class="contenedor">
+    <aside class="barra-lateral">
+      <div class="usuario">
+        <div class="avatar">U</div>
+        <div>
+          <strong>Usuario</strong>
+          <small>Administrador</small>
+        </div>
+      </div>
+
+      <nav class="navegacion" aria-label="Menú principal">
+        <a class="activo" href="#"><span class="icono">▦</span>Horarios</a>
+        <a href="#"><span class="icono">▤</span>Materias</a>
+        <a href="#"><span class="icono">♙</span>Usuarios</a>
+        <a href="#"><span class="icono">▣</span>Carreras</a>
+        <a href="#"><span class="icono">▥</span>Facultades</a>
+        <a href="#"><span class="icono">☷</span>Ver materias<br> asignadas</a>
+      </nav>
+    </aside>
+
+    <main class="contenido">
+      <div class="barra-filtros">
+        <label>
+          <span class="sr-only">Período</span>
+          <select>
+            <option value="">Período</option>
+            <option>2026-1</option>
+            <option>2026-2</option>
+          </select>
+        </label>
+        <div class="filtros-derecha">
+          <label>
+            <span class="sr-only">Semestre</span>
+            <select>
+              <option value="">Semestre</option>
+              <option>Primero</option>
+              <option>Segundo</option>
+              <option>Tercero</option>
+              <option>Cuarto</option>
+              <option>Quinto</option>
+              <option>Sexto</option>
+              <option>Séptimo</option>
+              <option>Octavo</option>
+            </select>
+          </label>
+          <label>
+            <span class="sr-only">Paralelo</span>
+            <select>
+              <option value="">Paralelo</option>
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <section class="panel-horario">
+        <div class="panel-interior">
+          <div class="titulo-panel">
+            <span class="indicador"></span>
+            <h1>Horario académico</h1>
+          </div>
+          <div class="zona-horario">
+            <p>Selecciona un período, semestre y paralelo para visualizar el horario.</p>
+            <div class="mensaje-vacio">
+              <span class="icono-calendario">▦</span>
+              <strong>El horario aparecerá aquí</strong>
+              <small>Elige los filtros superiores para consultar la información.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
