@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>THOT | Materias</title><link rel="stylesheet" href="../Estilo/THOT - PaginaMateria.css"></head><body>
+
+<header class="encabezado">
+  <div class="marca-uleam"><img src="../Imagenes/logo_uleam_dorado.png" alt="Logo ULEAM"><span>ULEAM</span></div>
+  <div class="marca-thot"><span>THOT</span><img src="../Imagenes/logo_thot.png" alt="Logo THOT"></div>
+</header>
+
+<div class="contenedor">
+<aside class="barra-lateral">
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Administrador</small></div></div>
+  <nav class="navegacion">
+    <a class="horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+    <a class="activo-materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+    <a href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a><a href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+    <a href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a><a href="#"><span>☷</span>Ver materias<br> asignadas</a>
+  </nav>
+</aside>
+
+<main class="contenido">
+  <div class="titulo-pagina"><span class="linea-dorada"></span><div><h1>Gestión de materias</h1><p>Administra la información de las materias académicas</p></div></div>
+  <div class="columnas">
+    <section class="panel formulario-panel">
+      <div class="cabecera"><div><label>GESTIÓN ACADÉMICA</label><h2 id="titulo-formulario">Agregar materia</h2><p id="descripcion-formulario">Completa la información de la materia.</p></div><div class="icono-panel">✎</div></div>
+      <form id="form-materia">
+        <div class="campo"><label for="nombre">Nombre de la materia</label><input id="nombre" required placeholder="Ej. Programación Estructurada"></div>
+        <div class="campo"><label for="codigo">Código de la materia</label><input id="codigo" required placeholder="Ej. PRG-101"></div>
+        <div class="campo"><label for="creditos">Número de créditos</label><input id="creditos" type="number" min="1" max="20" required placeholder="Ej. 4"></div>
+        <div class="campo"><label for="facultad">Facultad</label><select id="facultad" required><option value="">Seleccione una facultad</option></select><small class="ayuda-select">Solo aparecen facultades registradas.</small></div>
+        <div class="campo"><label for="carrera">Carrera</label><select id="carrera" required disabled><option value="">Primero seleccione una facultad</option></select><small class="ayuda-select">Se mostrarán las carreras pertenecientes a la facultad elegida.</small></div>
+        <div class="acciones-formulario"><button class="btn-principal" id="btn-guardar" type="submit">Guardar materia</button><button class="btn-secundario" id="btn-cancelar" type="button" hidden>Cancelar edición</button></div>
+      </form><p class="nota-formulario">Los campos son obligatorios para registrar una materia.</p>
+    </section>
+    <section class="panel listado-panel">
+      <div class="cabecera-listado"><div><label>REGISTROS</label><h2>Lista de materias</h2><p>Materias registradas en el sistema</p></div><button class="btn-agregar" id="btn-nueva" type="button">+</button></div>
+      <div class="resumen-listado"><span>Materias disponibles</span><strong id="contador">3 materias</strong></div>
+      <ul class="lista-materias" id="lista-materias">
+        <li class="materia" data-nombre="Programación Estructurada" data-codigo="PRG-101" data-creditos="4"><div class="materia-info"><span class="punto"></span><div><strong>Programación Estructurada</strong><small>PRG-101 · 4 créditos</small></div></div><div class="acciones-item"><button class="btn-editar" type="button">Editar</button><button class="btn-eliminar" type="button">Eliminar</button></div></li>
+        <li class="materia" data-nombre="Base de Datos" data-codigo="BDD-102" data-creditos="4"><div class="materia-info"><span class="punto"></span><div><strong>Base de Datos</strong><small>BDD-102 · 4 créditos</small></div></div><div class="acciones-item"><button class="btn-editar" type="button">Editar</button><button class="btn-eliminar" type="button">Eliminar</button></div></li>
+        <li class="materia" data-nombre="Redes de Computadoras" data-codigo="RED-103" data-creditos="3"><div class="materia-info"><span class="punto"></span><div><strong>Redes de Computadoras</strong><small>RED-103 · 3 créditos</small></div></div><div class="acciones-item"><button class="btn-editar" type="button">Editar</button><button class="btn-eliminar" type="button">Eliminar</button></div></li>
+      </ul><div class="lista-vacia" id="lista-vacia" hidden><strong>No hay materias registradas</strong><small>Utiliza el botón + para agregar una materia.</small></div>
+    </section>
+  </div>
+</main></div>
+<script>
+const KEY_MATERIAS="thot_materias",KEY_FAC="thot_facultades",KEY_CAR="thot_carreras";
+const form=document.getElementById("form-materia"),list=document.getElementById("lista-materias");
+const faculty=document.getElementById("facultad"),career=document.getElementById("carrera");
+const title=document.getElementById("titulo-formulario"),desc=document.getElementById("descripcion-formulario");
+const save=document.getElementById("btn-guardar"),cancel=document.getElementById("btn-cancelar");
+let editingCode=null;
+const read=key=>JSON.parse(localStorage.getItem(key)||"[]");
+const write=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
+function loadFaculties(selected=""){
+  faculty.innerHTML='<option value="">Seleccione una facultad</option>';
+  read(KEY_FAC).forEach(f=>{const o=document.createElement("option");o.value=f.codigo;o.textContent=f.nombre;faculty.append(o);});
+  faculty.value=selected;
+}
+function loadCareers(facCode,selected=""){
+  career.innerHTML='<option value="">Seleccione una carrera</option>';
+  const rows=read(KEY_CAR).filter(c=>c.facultadCodigo===facCode);
+  rows.forEach(c=>{const o=document.createElement("option");o.value=c.codigo;o.textContent=c.nombre;career.append(o);});
+  career.disabled=!facCode||rows.length===0;
+  if(!facCode)career.innerHTML='<option value="">Primero seleccione una facultad</option>';
+  else if(!rows.length)career.innerHTML='<option value="">No hay carreras para esta facultad</option>';
+  career.value=selected;
+}
+faculty.addEventListener("change",()=>loadCareers(faculty.value));
+function updateCount(){const n=list.querySelectorAll(".materia").length;document.getElementById("contador").textContent=n+" "+(n===1?"materia":"materias");document.getElementById("lista-vacia").hidden=n!==0;}
+function makeItem(m){
+ const li=document.createElement("li");li.className="materia";li.dataset.codigo=m.codigo;
+ const info=document.createElement("div");info.className="materia-info";const dot=document.createElement("span");dot.className="punto";
+ const data=document.createElement("div"),strong=document.createElement("strong"),small=document.createElement("small");
+ strong.textContent=m.nombre;small.textContent=m.codigo+" · "+m.creditos+" créditos · "+m.carreraNombre;
+ data.append(strong,small);info.append(dot,data);
+ const actions=document.createElement("div");actions.className="acciones-item";
+ const edit=document.createElement("button");edit.type="button";edit.className="btn-editar";edit.textContent="Editar";
+ const del=document.createElement("button");del.type="button";del.className="btn-eliminar";del.textContent="Eliminar";
+ actions.append(edit,del);li.append(info,actions);return li;
+}
+function render(){
+ const materias=read(KEY_MATERIAS);list.innerHTML="";
+ materias.forEach(m=>list.append(makeItem(m)));
+ updateCount();
+}
+function resetForm(){
+ form.reset();editingCode=null;loadFaculties();loadCareers("");
+ title.textContent="Agregar materia";desc.textContent="Completa la información de la materia.";
+ save.textContent="Guardar materia";cancel.hidden=true;
+}
+form.addEventListener("submit",event=>{
+ event.preventDefault();
+ const nombre=document.getElementById("nombre").value.trim(),codigo=document.getElementById("codigo").value.trim();
+ const creditos=document.getElementById("creditos").value;
+ const facultad=read(KEY_FAC).find(f=>f.codigo===faculty.value);
+ const carrera=read(KEY_CAR).find(c=>c.codigo===career.value&&c.facultadCodigo===faculty.value);
+ if(!facultad||!carrera){alert("Selecciona una facultad y una carrera registradas.");return;}
+ const materias=read(KEY_MATERIAS);
+ if(materias.some(m=>m.codigo.toLowerCase()===codigo.toLowerCase()&&m.codigo!==editingCode)){alert("Ya existe una materia con ese código.");return;}
+ const materia={nombre,codigo,creditos,facultadCodigo:facultad.codigo,facultadNombre:facultad.nombre,carreraCodigo:carrera.codigo,carreraNombre:carrera.nombre};
+ if(editingCode){const i=materias.findIndex(m=>m.codigo===editingCode);materias[i]=materia;}else materias.push(materia);
+ write(KEY_MATERIAS,materias);resetForm();render();
+});
+list.addEventListener("click",event=>{
+ const item=event.target.closest(".materia");if(!item)return;
+ const codigo=item.dataset.codigo,materias=read(KEY_MATERIAS),m=materias.find(x=>x.codigo===codigo);
+ if(event.target.classList.contains("btn-eliminar")&&confirm("¿Eliminar la materia "+m.nombre+"?")){
+   write(KEY_MATERIAS,materias.filter(x=>x.codigo!==codigo));if(editingCode===codigo)resetForm();render();
+ }
+ if(event.target.classList.contains("btn-editar")){
+   editingCode=codigo;document.getElementById("nombre").value=m.nombre;document.getElementById("codigo").value=m.codigo;
+   document.getElementById("creditos").value=m.creditos;loadFaculties(m.facultadCodigo);loadCareers(m.facultadCodigo,m.carreraCodigo);
+   title.textContent="Editar materia";desc.textContent="Modifica los datos de la materia seleccionada.";
+   save.textContent="Guardar cambios";cancel.hidden=false;
+ }
+});
+document.getElementById("btn-nueva").addEventListener("click",()=>{resetForm();document.getElementById("nombre").focus();});
+cancel.addEventListener("click",resetForm);
+loadFaculties();loadCareers("");render();
+</script></body></html>

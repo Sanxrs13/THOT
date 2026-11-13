@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>THOT | Horarios</title><link rel="stylesheet" href="../Estilo/THOT - PaginaHorario.css"></head><body>
+
+<header class="encabezado">
+  <div class="marca-uleam"><img src="../Imagenes/logo_uleam_dorado.png" alt="Logo ULEAM"><span>ULEAM</span></div>
+  <div class="marca-thot"><span>THOT</span><img src="../Imagenes/logo_thot.png" alt="Logo THOT"></div>
+</header>
+
+<div class="contenedor">
+<aside class="barra-lateral">
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Administrador</small></div></div>
+  <nav class="navegacion">
+    <a class="activo-horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+    <a class="" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+    <a href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a><a href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+    <a href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a><a href="#"><span>☷</span>Ver materias<br> asignadas</a>
+  </nav>
+</aside>
+
+<main class="contenido">
+  <div class="barra-filtros">
+    <div class="filtros-academicos">
+      <label><span class="sr-only">Facultad</span><select id="filtro-facultad"><option value="">Todas las facultades</option></select></label>
+      <label><span class="sr-only">Carrera</span><select id="filtro-carrera" disabled><option value="">Todas las carreras</option></select></label>
+    </div>
+    <label><span class="sr-only">Período</span><select id="filtro-periodo"><option value="">Período</option><option value="2026-1">2026-1</option><option value="2026-2">2026-2</option></select></label>
+    <div class="filtros-derecha">
+      <label><span class="sr-only">Semestre</span><select id="filtro-semestre"><option value="">Semestre</option><option>Primero</option><option>Segundo</option><option>Tercero</option><option>Cuarto</option><option>Quinto</option><option>Sexto</option><option>Séptimo</option><option>Octavo</option></select></label>
+      <label><span class="sr-only">Paralelo</span><select id="filtro-paralelo"><option value="">Paralelo</option><option>A</option><option>B</option><option>C</option></select></label>
+    </div>
+  </div>
+  <section class="panel-horario"><div class="panel-interior">
+    <div class="titulo-panel"><span class="indicador"></span><h1>Horario académico</h1></div>
+    <div class="zona-horario"><p>Selecciona un período, semestre y paralelo para visualizar el horario.</p>
+      <div class="mensaje-vacio"><span class="icono-calendario">▦</span><strong>El horario aparecerá aquí</strong><small>Elige los filtros superiores para consultar la información.</small></div>
+    </div>
+  </div></section>
+</main></div>
+<script>
+// Los filtros consultan las mismas claves compartidas por las páginas de Facultades y Carreras.
+const KEY_FACULTADES = "thot_facultades";
+const KEY_CARRERAS = "thot_carreras";
+const filtroFacultad = document.getElementById("filtro-facultad");
+const filtroCarrera = document.getElementById("filtro-carrera");
+const leerRegistros = clave => {
+  try { return JSON.parse(localStorage.getItem(clave) || "[]"); }
+  catch (error) { console.error("No se pudieron leer los registros THOT:", error); return []; }
+};
+function cargarFacultadesHorario(seleccionada = "") {
+  filtroFacultad.innerHTML = '<option value="">Todas las facultades</option>';
+  leerRegistros(KEY_FACULTADES).forEach(facultad => {
+    const opcion = document.createElement("option");
+    opcion.value = facultad.codigo;
+    opcion.textContent = facultad.nombre;
+    filtroFacultad.appendChild(opcion);
+  });
+  filtroFacultad.value = seleccionada;
+  cargarCarrerasHorario(seleccionada);
+}
+function cargarCarrerasHorario(codigoFacultad, seleccionada = "") {
+  filtroCarrera.innerHTML = '<option value="">Todas las carreras</option>';
+  const carreras = codigoFacultad
+    ? leerRegistros(KEY_CARRERAS).filter(carrera => carrera.facultadCodigo === codigoFacultad)
+    : leerRegistros(KEY_CARRERAS);
+  carreras.forEach(carrera => {
+    const opcion = document.createElement("option");
+    opcion.value = carrera.codigo;
+    opcion.textContent = carrera.nombre;
+    filtroCarrera.appendChild(opcion);
+  });
+  filtroCarrera.disabled = carreras.length === 0;
+  filtroCarrera.value = seleccionada;
+}
+filtroFacultad.addEventListener("change", () => cargarCarrerasHorario(filtroFacultad.value));
+// Actualiza los selectores si otra pestaña modifica Facultades o Carreras.
+window.addEventListener("storage", evento => {
+  if ([KEY_FACULTADES, KEY_CARRERAS].includes(evento.key)) {
+    const facultadActual = filtroFacultad.value;
+    const carreraActual = filtroCarrera.value;
+    cargarFacultadesHorario(facultadActual);
+    if ([...filtroCarrera.options].some(opcion => opcion.value === carreraActual)) filtroCarrera.value = carreraActual;
+  }
+});
+cargarFacultadesHorario();
+</script>
+</body></html>
