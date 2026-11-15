@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>THOT | Horarios</title><link rel="stylesheet" href="../Estilo/THOT - PaginaHorario.css"></head><body>
+<title>THOT | Horarios</title><link rel="stylesheet" href="../Estilo/THOT - PaginaHorario.css"><link rel="stylesheet" href="../Estilo/THOT - Comun.css"></head><body>
 
 <header class="encabezado">
   <div class="marca-uleam"><img src="../Imagenes/logo_uleam_dorado.png" alt="Logo ULEAM"><span>ULEAM</span></div>
@@ -9,79 +9,216 @@
 
 <div class="contenedor">
 <aside class="barra-lateral">
-  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Administrador</small></div></div>
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Rol</small></div></div>
   <nav class="navegacion">
-    <a class="activo-horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
-    <a class="" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
-    <a href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a><a href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
-    <a href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a><a href="#"><span>☷</span>Ver materias<br> asignadas</a>
-  </nav>
+<a data-modulo="horarios" href="THOT - PaginaHorario.html" class="activo"><span>▦</span>Horarios</a>
+<a data-modulo="materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+<a data-modulo="usuarios" href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
+<a data-modulo="carreras" href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+<a data-modulo="facultades" href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a>
+<a data-modulo="espacios" href="THOT - PaginaEspacio.html"><span>⌂</span>Espacios</a>
+<a data-modulo="asignadas" href="THOT - PaginaAsignadas.html"><span>☷</span>Ver materias<br>asignadas</a>
+<a href="#" id="cerrar-sesion"><span>⎋</span>Cerrar sesión</a>
+</nav>
 </aside>
 
 <main class="contenido">
-  <div class="barra-filtros">
-    <div class="filtros-academicos">
-      <label><span class="sr-only">Facultad</span><select id="filtro-facultad"><option value="">Todas las facultades</option></select></label>
-      <label><span class="sr-only">Carrera</span><select id="filtro-carrera" disabled><option value="">Todas las carreras</option></select></label>
-    </div>
-    <label><span class="sr-only">Período</span><select id="filtro-periodo"><option value="">Período</option><option value="2026-1">2026-1</option><option value="2026-2">2026-2</option></select></label>
-    <div class="filtros-derecha">
-      <label><span class="sr-only">Semestre</span><select id="filtro-semestre"><option value="">Semestre</option><option>Primero</option><option>Segundo</option><option>Tercero</option><option>Cuarto</option><option>Quinto</option><option>Sexto</option><option>Séptimo</option><option>Octavo</option></select></label>
-      <label><span class="sr-only">Paralelo</span><select id="filtro-paralelo"><option value="">Paralelo</option><option>A</option><option>B</option><option>C</option></select></label>
-    </div>
-  </div>
-  <section class="panel-horario"><div class="panel-interior">
-    <div class="titulo-panel"><span class="indicador"></span><h1>Horario académico</h1></div>
-    <div class="zona-horario"><p>Selecciona un período, semestre y paralelo para visualizar el horario.</p>
-      <div class="mensaje-vacio"><span class="icono-calendario">▦</span><strong>El horario aparecerá aquí</strong><small>Elige los filtros superiores para consultar la información.</small></div>
-    </div>
-  </div></section>
+<div class="barra-filtros">
+<div class="filtros-academicos">
+<label><span class="sr-only">Facultad</span><select id="filtro-facultad"><option value="">Todas las facultades</option></select></label>
+<label><span class="sr-only">Carrera</span><select id="filtro-carrera" disabled><option value="">Todas las carreras</option></select></label>
+<label><span class="sr-only">Período</span><select id="filtro-periodo"><option value="">Período</option><option value="2026-1">2026-1</option><option value="2026-2">2026-2</option></select></label>
+</div>
+<div class="filtros-derecha">
+<label><span class="sr-only">Semestre</span><select id="filtro-semestre"><option value="">Semestre</option><option>Primero</option><option>Segundo</option><option>Tercero</option><option>Cuarto</option><option>Quinto</option><option>Sexto</option><option>Séptimo</option><option>Octavo</option><option>Noveno</option><option>Décimo</option></select></label>
+<label><span class="sr-only">Paralelo</span><select id="filtro-paralelo"><option value="">Paralelo</option><option>A</option><option>B</option><option>C</option></select></label>
+<button type="button" class="btn-nueva-asignacion solo-gestion" id="btn-nueva-asignacion">+ Nueva asignación</button>
+</div>
+</div>
+
+<section class="panel-asignacion solo-gestion" id="panel-asignacion" hidden>
+<h2>Nueva asignación</h2>
+<p>Asigna un docente, una materia y un espacio a un día y hora. El sistema evita cruces de docente, aula y curso.</p>
+<form id="form-asignacion">
+<div class="form-rejilla">
+<div class="campo"><label for="a-docente">Docente</label><select id="a-docente" required></select></div>
+<div class="campo"><label for="a-materia">Materia</label><select id="a-materia" required></select></div>
+<div class="campo"><label for="a-periodo">Período</label><select id="a-periodo" required><option value="">Seleccione</option><option>2026-1</option><option>2026-2</option></select></div>
+<div class="campo"><label for="a-semestre">Semestre</label><select id="a-semestre" required><option value="">Seleccione</option><option>Primero</option><option>Segundo</option><option>Tercero</option><option>Cuarto</option><option>Quinto</option><option>Sexto</option><option>Séptimo</option><option>Octavo</option><option>Noveno</option><option>Décimo</option></select></div>
+<div class="campo"><label for="a-paralelo">Paralelo</label><select id="a-paralelo" required><option value="">Seleccione</option><option>A</option><option>B</option><option>C</option></select></div>
+<div class="campo"><label for="a-dia">Día</label><select id="a-dia" required><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option></select></div>
+<div class="campo"><label for="a-inicio">Hora de inicio</label><select id="a-inicio" required></select></div>
+<div class="campo"><label for="a-fin">Hora de fin</label><select id="a-fin" required></select></div>
+<div class="campo"><label for="a-espacio">Espacio</label><select id="a-espacio" required></select><small class="ayuda-select" id="ayuda-espacio"></small></div>
+</div>
+<div class="acciones-formulario"><button class="btn-principal" type="submit">Guardar asignación</button><button class="btn-secundario" id="a-cancelar" type="button">Cerrar</button></div>
+<p id="mensaje-asignacion" hidden></p>
+</form>
+</section>
+
+<section class="panel-horario"><div class="panel-interior">
+<div class="titulo-panel"><span class="indicador"></span><h1>Horario académico</h1></div>
+<div class="zona-horario"><p id="texto-horario">Selecciona un período, semestre y paralelo para visualizar el horario.</p>
+<div class="mensaje-vacio" id="vacio"><span class="icono-calendario">▦</span><strong id="vacio-titulo">El horario aparecerá aquí</strong><small id="vacio-detalle">Elige los filtros superiores para consultar la información.</small></div>
+<div class="cuadro-horario" id="cuadro" hidden><div class="rejilla-horario" id="rejilla"></div>
+<div class="leyenda"><span><i></i>Aula</span><span><i class="lab"></i>Laboratorio</span></div></div>
+</div></div></section>
 </main></div>
+
+<script src="thot-comun.js"></script>
 <script>
-// Los filtros consultan las mismas claves compartidas por las páginas de Facultades y Carreras.
-const KEY_FACULTADES = "thot_facultades";
-const KEY_CARRERAS = "thot_carreras";
-const filtroFacultad = document.getElementById("filtro-facultad");
-const filtroCarrera = document.getElementById("filtro-carrera");
-const leerRegistros = clave => {
-  try { return JSON.parse(localStorage.getItem(clave) || "[]"); }
-  catch (error) { console.error("No se pudieron leer los registros THOT:", error); return []; }
-};
-function cargarFacultadesHorario(seleccionada = "") {
-  filtroFacultad.innerHTML = '<option value="">Todas las facultades</option>';
-  leerRegistros(KEY_FACULTADES).forEach(facultad => {
-    const opcion = document.createElement("option");
-    opcion.value = facultad.codigo;
-    opcion.textContent = facultad.nombre;
-    filtroFacultad.appendChild(opcion);
-  });
-  filtroFacultad.value = seleccionada;
-  cargarCarrerasHorario(seleccionada);
-}
-function cargarCarrerasHorario(codigoFacultad, seleccionada = "") {
-  filtroCarrera.innerHTML = '<option value="">Todas las carreras</option>';
-  const carreras = codigoFacultad
-    ? leerRegistros(KEY_CARRERAS).filter(carrera => carrera.facultadCodigo === codigoFacultad)
-    : leerRegistros(KEY_CARRERAS);
-  carreras.forEach(carrera => {
-    const opcion = document.createElement("option");
-    opcion.value = carrera.codigo;
-    opcion.textContent = carrera.nombre;
-    filtroCarrera.appendChild(opcion);
-  });
-  filtroCarrera.disabled = carreras.length === 0;
-  filtroCarrera.value = seleccionada;
-}
-filtroFacultad.addEventListener("change", () => cargarCarrerasHorario(filtroFacultad.value));
-// Actualiza los selectores si otra pestaña modifica Facultades o Carreras.
-window.addEventListener("storage", evento => {
-  if ([KEY_FACULTADES, KEY_CARRERAS].includes(evento.key)) {
-    const facultadActual = filtroFacultad.value;
-    const carreraActual = filtroCarrera.value;
-    cargarFacultadesHorario(facultadActual);
-    if ([...filtroCarrera.options].some(opcion => opcion.value === carreraActual)) filtroCarrera.value = carreraActual;
+(async () => {
+  let ses; try { ses = await THOT.iniciar("horarios"); } catch (e) { return; }
+  const gest = THOT.puede("horarios", "gestionar");
+  const $ = id => document.getElementById(id);
+  const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
+  const H0 = 7, H1 = 19, ALTO = 56;
+  const fFac = $("filtro-facultad"), fCar = $("filtro-carrera"), fPer = $("filtro-periodo"),
+        fSem = $("filtro-semestre"), fPar = $("filtro-paralelo");
+  let facultades = [], carreras = [], materias = [], espacios = [], docentes = [];
+
+  const hh = n => String(n).padStart(2, "0") + ":00";
+
+  /* ---------- filtros ---------- */
+  function cargarCarreras(facCodigo, sel = "") {
+    const filas = facCodigo ? carreras.filter(c => c.facultadCodigo === facCodigo) : carreras;
+    THOT.llenarSelect(fCar, filas, c => c.codigo, c => c.nombre, "Todas las carreras", sel);
+    fCar.disabled = filas.length === 0;
   }
-});
-cargarFacultadesHorario();
+  fFac.addEventListener("change", () => { cargarCarreras(fFac.value); actualizar(); });
+  [fCar, fPer, fSem, fPar].forEach(s => s.addEventListener("change", actualizar));
+
+  /* ---------- dibujo del horario semanal ---------- */
+  function mostrarVacio(texto, detalle) {
+    $("cuadro").hidden = true; $("vacio").hidden = false;
+    $("vacio-titulo").textContent = texto; $("vacio-detalle").textContent = detalle;
+  }
+  function carriles(items) {
+    items.sort((a, b) => a.horaInicio - b.horaInicio || a.horaFin - b.horaFin);
+    const fin = [];
+    items.forEach(a => {
+      let l = fin.findIndex(f => f <= a.horaInicio);
+      if (l < 0) { l = fin.length; fin.push(0); }
+      fin[l] = a.horaFin; a._carril = l;
+    });
+    return Math.max(fin.length, 1);
+  }
+  function dibujar(datos) {
+    const rej = $("rejilla"); rej.innerHTML = "";
+    const cab0 = document.createElement("div"); cab0.className = "cab"; cab0.textContent = "Hora"; rej.append(cab0);
+    DIAS.forEach(d => { const c = document.createElement("div"); c.className = "cab"; c.textContent = d; rej.append(c); });
+    const horas = document.createElement("div"); horas.className = "horas";
+    for (let h = H0; h < H1; h++) { const x = document.createElement("div"); x.className = "hora"; x.textContent = hh(h); horas.append(x); }
+    rej.append(horas);
+    DIAS.forEach(dia => {
+      const col = document.createElement("div"); col.className = "dia"; col.style.height = ((H1 - H0) * ALTO) + "px";
+      const del = datos.filter(a => a.dia === dia), n = carriles(del);
+      del.forEach(a => {
+        const b = document.createElement("div");
+        b.className = "bloque-clase" + (a.espacioTipo === "Laboratorio" ? " lab" : "");
+        b.style.top = ((a.horaInicio - H0) * ALTO + 2) + "px";
+        b.style.height = ((a.horaFin - a.horaInicio) * ALTO - 4) + "px";
+        b.style.left = "calc(" + (a._carril * 100 / n) + "% + 2px)";
+        b.style.width = "calc(" + (100 / n) + "% - 4px)";
+        const t = document.createElement("strong"); t.textContent = a.materiaNombre;
+        const l1 = document.createElement("small"); l1.textContent = hh(a.horaInicio) + "–" + hh(a.horaFin) + " · " + a.docenteNombre;
+        const l2 = document.createElement("small"); l2.textContent = a.espacioTipo + " " + a.espacioId;
+        b.append(t, l1, l2);
+        if (!fCar.value) { const l3 = document.createElement("small"); l3.textContent = a.carreraNombre; b.append(l3); }
+        b.title = a.materiaNombre + "\n" + a.docenteNombre + "\n" + a.espacioDescripcion;
+        if (gest) {
+          const q = document.createElement("button"); q.type = "button"; q.className = "quitar"; q.textContent = "×";
+          q.title = "Quitar esta asignación";
+          q.addEventListener("click", async () => {
+            if (!confirm("¿Quitar " + a.materiaNombre + " (" + a.dia + " " + hh(a.horaInicio) + ")?")) return;
+            try { await THOT.del("/api/asignaciones/" + encodeURIComponent(a.id)); } catch (e) { THOT.error(e); return; }
+            actualizar();
+          });
+          b.append(q);
+        }
+        col.append(b);
+      });
+      rej.append(col);
+    });
+    $("vacio").hidden = true; $("cuadro").hidden = false;
+    $("texto-horario").textContent = datos.length
+      ? datos.length + (datos.length === 1 ? " clase" : " clases") + " en este horario."
+      : "No hay clases registradas para esta selección.";
+  }
+  async function actualizar() {
+    if (!fPer.value || !fSem.value || !fPar.value) {
+      $("texto-horario").textContent = "Selecciona un período, semestre y paralelo para visualizar el horario.";
+      mostrarVacio("El horario aparecerá aquí", "Elige los filtros superiores para consultar la información.");
+      return;
+    }
+    const q = new URLSearchParams({ periodo: fPer.value, semestre: fSem.value, paralelo: fPar.value });
+    if (fFac.value) q.set("facultad", fFac.value);
+    if (fCar.value) q.set("carrera", fCar.value);
+    let datos;
+    try { datos = await THOT.get("/api/asignaciones?" + q); } catch (e) { THOT.error(e); return; }
+    dibujar(datos);
+  }
+
+  /* ---------- formulario de nueva asignacion (solo roles que gestionan) ---------- */
+  function prepararFormulario() {
+    const btn = $("btn-nueva-asignacion"), panel = $("panel-asignacion"), form = $("form-asignacion");
+    const aMat = $("a-materia"), aEsp = $("a-espacio");
+    THOT.llenarSelect($("a-docente"), docentes, d => d.cedula, d => d.nombre + " (" + d.cedula + ")", "Seleccione un docente");
+    THOT.llenarSelect(aMat, materias, m => m.codigo, m => m.nombre + " · " + m.carreraNombre, "Seleccione una materia");
+    function llenarEspacios() {
+      const m = materias.find(x => x.codigo === aMat.value);
+      const lista = m && m.usarLab ? espacios.filter(e => e.tipo === "Laboratorio") : espacios;
+      THOT.llenarSelect(aEsp, lista, e => e.id, e => e.descripcion, "Seleccione un espacio", aEsp.value);
+      $("ayuda-espacio").textContent = m && m.usarLab ? "Esta materia requiere laboratorio." : "";
+    }
+    aMat.addEventListener("change", llenarEspacios);
+    llenarEspacios();
+    const horas = (sel, desde, hasta) => { for (let h = desde; h <= hasta; h++) { const o = document.createElement("option"); o.value = h; o.textContent = hh(h); sel.append(o); } };
+    horas($("a-inicio"), H0, H1 - 1); horas($("a-fin"), H0 + 1, H1);
+    $("a-fin").value = H0 + 2;
+    btn.addEventListener("click", () => {
+      panel.hidden = !panel.hidden;
+      if (!panel.hidden) {
+        if (fPer.value) $("a-periodo").value = fPer.value;
+        if (fSem.value) $("a-semestre").value = fSem.value;
+        if (fPar.value) $("a-paralelo").value = fPar.value;
+        $("mensaje-asignacion").hidden = true;
+      }
+    });
+    $("a-cancelar").addEventListener("click", () => { panel.hidden = true; });
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const msg = $("mensaje-asignacion"); msg.hidden = true;
+      const cuerpo = {
+        docenteCedula: $("a-docente").value, materiaCodigo: aMat.value, espacioId: aEsp.value,
+        periodo: $("a-periodo").value, semestre: $("a-semestre").value, paralelo: $("a-paralelo").value,
+        dia: $("a-dia").value, horaInicio: Number($("a-inicio").value), horaFin: Number($("a-fin").value)
+      };
+      try { await THOT.post("/api/asignaciones", cuerpo); }
+      catch (err) { msg.className = "mensaje-error"; msg.textContent = err.message; msg.hidden = false; return; }
+      // se muestran los filtros del curso recien asignado para que se vea el resultado
+      const m = materias.find(x => x.codigo === cuerpo.materiaCodigo);
+      fPer.value = cuerpo.periodo; fSem.value = cuerpo.semestre; fPar.value = cuerpo.paralelo;
+      fFac.value = m.facultadCodigo; cargarCarreras(m.facultadCodigo, m.carreraCodigo);
+      msg.className = "mensaje-ok"; msg.textContent = "Asignación creada correctamente."; msg.hidden = false;
+      actualizar();
+    });
+  }
+
+  /* ---------- arranque ---------- */
+  try {
+    [facultades, carreras] = await Promise.all([THOT.get("/api/facultades"), THOT.get("/api/carreras")]);
+    if (gest) [materias, espacios, docentes] = await Promise.all(
+      [THOT.get("/api/materias"), THOT.get("/api/espacios"), THOT.get("/api/docentes")]);
+  } catch (e) { THOT.error(e); }
+  THOT.llenarSelect(fFac, facultades, f => f.codigo, f => f.nombre, "Todas las facultades");
+  cargarCarreras("");
+  if (ses.rol === "Estudiante") {            // el estudiante ve su curso ya filtrado
+    fFac.value = ses.facultadCodigo; cargarCarreras(ses.facultadCodigo, ses.carreraCodigo);
+    fSem.value = ses.nivel;
+  }
+  if (gest) prepararFormulario();
+  actualizar();
+})();
 </script>
 </body></html>
