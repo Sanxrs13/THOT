@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THOT | Usuarios</title>
-  <link rel="stylesheet" href="../Estilo/THOT - PaginaUsuario.css">
+  <link rel="stylesheet" href="../Estilo/THOT - PaginaUsuario.css"><link rel="stylesheet" href="../Estilo/THOT - Comun.css">
 </head>
 <body>
 <header class="encabezado">
@@ -13,112 +13,133 @@
 </header>
 <div class="contenedor">
   <aside class="barra-lateral">
-    <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Administrador</small></div></div>
+    <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Rol</small></div></div>
     <nav class="navegacion">
-      <a href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
-      <a href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
-      <a href="THOT - PaginaUsuario.html" class="activo"><span>♙</span>Usuarios</a>
-      <a href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
-      <a href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a>
-      <a href="#"><span>☷</span>Ver materias<br>asignadas</a>
-    </nav>
+<a data-modulo="horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+<a data-modulo="materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+<a data-modulo="usuarios" href="THOT - PaginaUsuario.html" class="activo"><span>♙</span>Usuarios</a>
+<a data-modulo="carreras" href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+<a data-modulo="facultades" href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a>
+<a data-modulo="espacios" href="THOT - PaginaEspacio.html"><span>⌂</span>Espacios</a>
+<a data-modulo="asignadas" href="THOT - PaginaAsignadas.html"><span>☷</span>Ver materias<br>asignadas</a>
+<a href="#" id="cerrar-sesion"><span>⎋</span>Cerrar sesión</a>
+</nav>
   </aside>
   <main class="contenido">
     <div class="titulo-pagina"><span class="linea-dorada"></span><div><h1>Gestión de usuarios</h1><p>Registra y administra los usuarios del sistema THOT</p></div></div>
     <div class="columnas">
       <section class="panel listado-panel">
         <div class="cabecera-listado"><div><label>REGISTROS DEL SISTEMA</label><h2>Lista de usuarios</h2><p>Usuarios registrados en THOT</p></div>
-          <button class="btn-agregar" id="btn-nuevo" type="button" title="Agregar usuario">+</button></div>
+          <button class="btn-agregar solo-gestion" id="btn-nuevo" type="button" title="Agregar usuario">+</button></div>
         <div class="resumen-listado"><span>Usuarios disponibles</span><strong id="contador">0 usuarios</strong></div>
         <ul class="lista-registros" id="lista-usuarios"></ul>
         <div class="lista-vacia" id="lista-vacia"><strong>No hay usuarios registrados</strong><small>Utiliza el botón + para agregar un usuario.</small></div>
       </section>
-      <section class="panel formulario-panel">
+      <section class="panel formulario-panel solo-gestion">
         <div class="cabecera"><div><label>GESTIÓN DE USUARIOS</label><h2 id="titulo-formulario">Agregar usuario</h2><p id="descripcion-formulario">Completa la información del usuario.</p></div><div class="icono-panel">✎</div></div>
         <form id="form-usuario">
           <div class="campo"><label for="nombre">Nombres y apellidos</label><input id="nombre" type="text" placeholder="Ej. Juan Pérez López" required></div>
           <div class="campo"><label for="cedula">Cédula</label><input id="cedula" type="text" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="Ingrese los 10 dígitos" required></div>
-          <div class="campo"><label for="nivel">Nivel</label><select id="nivel" required><option value="">Seleccione un nivel</option><option>Primero</option><option>Segundo</option><option>Tercero</option><option>Cuarto</option><option>Quinto</option><option>Sexto</option><option>Séptimo</option><option>Octavo</option><option>Noveno</option><option>Décimo</option></select></div>
+          <div class="campo"><label for="correo">Correo institucional</label><input id="correo" type="text" readonly placeholder="Se genera automáticamente con la cédula"></div>
+<div class="campo"><label for="nivel">Nivel</label><select id="nivel" required><option value="">Seleccione un nivel</option><option>Primero</option><option>Segundo</option><option>Tercero</option><option>Cuarto</option><option>Quinto</option><option>Sexto</option><option>Séptimo</option><option>Octavo</option><option>Noveno</option><option>Décimo</option></select></div>
           <div class="campo"><label for="facultad">Facultad</label><select id="facultad" required><option value="">Seleccione una facultad</option></select></div>
           <div class="campo"><label for="carrera">Carrera</label><select id="carrera" required disabled><option value="">Primero seleccione una facultad</option></select></div>
           <div class="campo"><label for="rol">Rol</label><select id="rol" required><option value="">Seleccione un rol</option><option value="Administrador">Administrador</option><option value="Director">Director</option><option value="Presidente">Presidente</option><option value="Docente">Docente</option><option value="Estudiante">Estudiante</option></select></div>
-          <div class="acciones-formulario"><button class="btn-principal" id="btn-guardar" type="submit">Guardar usuario</button><button class="btn-secundario" id="btn-cancelar" type="button" hidden>Cancelar edición</button></div>
+          <div class="campo"><label for="contrasena">Contraseña</label><input id="contrasena" type="password" minlength="6" autocomplete="new-password" placeholder="Mínimo 6 caracteres" required></div>
+<div class="acciones-formulario"><button class="btn-principal" id="btn-guardar" type="submit">Guardar usuario</button><button class="btn-secundario" id="btn-cancelar" type="button" hidden>Cancelar edición</button></div>
         </form>
-        <p class="nota-formulario">La facultad y carrera se obtienen de los registros académicos existentes.</p>
+        <p class="nota-formulario">El correo se crea con la cédula (cedula@uleam.com). La facultad y carrera salen de los registros académicos existentes.</p>
       </section>
     </div>
   </main>
 </div>
+
+<script src="thot-comun.js"></script>
 <script>
-const KEY_USERS="thot_usuarios", KEY_FAC="thot_facultades", KEY_CAR="thot_carreras";
-const $=id=>document.getElementById(id);
-const form=$("form-usuario"), lista=$("lista-usuarios"), facSelect=$("facultad"), carSelect=$("carrera");
-let cedulaEditando=null;
-const read=key=>JSON.parse(localStorage.getItem(key)||"[]");
-const write=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
-function cargarFacultades(selected=""){
-  facSelect.innerHTML='<option value="">Seleccione una facultad</option>';
-  read(KEY_FAC).forEach(f=>{const o=document.createElement("option");o.value=f.codigo;o.textContent=f.nombre;facSelect.append(o);});
-  facSelect.value=selected;
-}
-function cargarCarreras(facCodigo,selected=""){
-  carSelect.innerHTML='<option value="">Seleccione una carrera</option>';
-  const carreras=read(KEY_CAR).filter(c=>c.facultadCodigo===facCodigo);
-  carreras.forEach(c=>{const o=document.createElement("option");o.value=c.codigo;o.textContent=c.nombre;carSelect.append(o);});
-  carSelect.disabled=!facCodigo||carreras.length===0;
-  if(!facCodigo) carSelect.innerHTML='<option value="">Primero seleccione una facultad</option>';
-  else if(!carreras.length) carSelect.innerHTML='<option value="">No hay carreras para esta facultad</option>';
-  carSelect.value=selected;
-}
-facSelect.addEventListener("change",()=>cargarCarreras(facSelect.value));
-function render(){
-  const users=read(KEY_USERS);lista.innerHTML="";
-  users.forEach(u=>{
-    const li=document.createElement("li");li.className="registro";li.dataset.cedula=u.cedula;
-    const info=document.createElement("div");info.className="registro-info";
-    const dot=document.createElement("span");dot.className="punto";
-    const data=document.createElement("div"),name=document.createElement("strong"),detail=document.createElement("small");
-    name.textContent=u.nombre;detail.textContent=u.cedula+" · "+u.rol+" · "+u.carreraNombre;
-    data.append(name,detail);info.append(dot,data);
-    const actions=document.createElement("div");actions.className="acciones-item";
-    const edit=document.createElement("button");edit.type="button";edit.className="btn-editar";edit.textContent="Editar";
-    const del=document.createElement("button");del.type="button";del.className="btn-eliminar";del.textContent="Eliminar";
-    actions.append(edit,del);li.append(info,actions);lista.append(li);
+(async () => {
+  try { await THOT.iniciar("usuarios"); } catch (e) { return; }
+  const gest = THOT.puede("usuarios", "gestionar");
+  const $ = id => document.getElementById(id);
+  const form = $("form-usuario"), lista = $("lista-usuarios"), facSelect = $("facultad"), carSelect = $("carrera");
+  let cedulaEditando = null, usuarios = [], facultades = [], carreras = [];
+
+  async function cargar() {
+    try {
+      [usuarios, facultades, carreras] = await Promise.all(
+        [THOT.get("/api/usuarios"), THOT.get("/api/facultades"), THOT.get("/api/carreras")]);
+    } catch (e) { THOT.error(e); }
+    cargarFacultades(facSelect.value); cargarCarreras(facSelect.value, carSelect.value); render();
+  }
+  function cargarFacultades(sel = "") {
+    THOT.llenarSelect(facSelect, facultades, f => f.codigo, f => f.nombre, "Seleccione una facultad", sel);
+  }
+  function cargarCarreras(facCodigo, sel = "") {
+    const filas = carreras.filter(c => c.facultadCodigo === facCodigo);
+    THOT.llenarSelect(carSelect, filas, c => c.codigo, c => c.nombre, "Seleccione una carrera", sel);
+    carSelect.disabled = !facCodigo || filas.length === 0;
+    if (!facCodigo) carSelect.options[0].textContent = "Primero seleccione una facultad";
+    else if (!filas.length) carSelect.options[0].textContent = "No hay carreras para esta facultad";
+  }
+  facSelect.addEventListener("change", () => cargarCarreras(facSelect.value));
+  $("cedula").addEventListener("input", () => {
+    const c = $("cedula").value.trim();
+    $("correo").value = c ? c + "@uleam.com" : "";
   });
-  $("contador").textContent=users.length+(users.length===1?" usuario":" usuarios");
-  $("lista-vacia").hidden=users.length>0;
-}
-function resetForm(){
-  form.reset();cedulaEditando=null;cargarFacultades();cargarCarreras("");
-  $("titulo-formulario").textContent="Agregar usuario";$("descripcion-formulario").textContent="Completa la información del usuario.";
-  $("btn-guardar").textContent="Guardar usuario";$("btn-cancelar").hidden=true;
-}
-form.addEventListener("submit",e=>{
-  e.preventDefault();
-  const cedula=$("cedula").value.trim(), facultad=read(KEY_FAC).find(f=>f.codigo===facSelect.value);
-  const carrera=read(KEY_CAR).find(c=>c.codigo===carSelect.value);
-  if(!facultad||!carrera){alert("Selecciona una facultad y una carrera registradas.");return;}
-  const users=read(KEY_USERS);
-  if(users.some(u=>u.cedula===cedula&&u.cedula!==cedulaEditando)){alert("Ya existe un usuario con esa cédula.");return;}
-  const user={nombre:$("nombre").value.trim(),cedula,nivel:$("nivel").value,facultadCodigo:facultad.codigo,facultadNombre:facultad.nombre,carreraCodigo:carrera.codigo,carreraNombre:carrera.nombre,rol:$("rol").value};
-  if(cedulaEditando){const i=users.findIndex(u=>u.cedula===cedulaEditando);users[i]=user;}else users.push(user);
-  write(KEY_USERS,users);resetForm();render();
-});
-lista.addEventListener("click",e=>{
-  const item=e.target.closest(".registro");if(!item)return;
-  const cedula=item.dataset.cedula,users=read(KEY_USERS),u=users.find(x=>x.cedula===cedula);
-  if(e.target.classList.contains("btn-editar")){
-    cedulaEditando=cedula;$("nombre").value=u.nombre;$("cedula").value=u.cedula;$("nivel").value=u.nivel;
-    cargarFacultades(u.facultadCodigo);cargarCarreras(u.facultadCodigo,u.carreraCodigo);$("rol").value=u.rol;
-    $("titulo-formulario").textContent="Editar usuario";$("descripcion-formulario").textContent="Modifica los datos del usuario seleccionado.";
-    $("btn-guardar").textContent="Guardar cambios";$("btn-cancelar").hidden=false;
+  function render() {
+    lista.innerHTML = "";
+    usuarios.forEach(u => {
+      const li = THOT.fila("registro", "registro-info", u.nombre,
+        u.cedula + " · " + u.rol + " · " + u.carreraNombre + " · " + u.correo, gest);
+      li.dataset.cedula = u.cedula;
+      lista.append(li);
+    });
+    $("contador").textContent = usuarios.length + (usuarios.length === 1 ? " usuario" : " usuarios");
+    $("lista-vacia").hidden = usuarios.length > 0;
   }
-  if(e.target.classList.contains("btn-eliminar")&&confirm("¿Eliminar el usuario "+u.nombre+"?")){
-    write(KEY_USERS,users.filter(x=>x.cedula!==cedula));if(cedulaEditando===cedula)resetForm();render();
+  function resetForm() {
+    form.reset(); cedulaEditando = null; cargarFacultades(); cargarCarreras("");
+    $("correo").value = "";
+    $("contrasena").required = true;
+    $("contrasena").placeholder = "Mínimo 6 caracteres";
+    $("titulo-formulario").textContent = "Agregar usuario";
+    $("descripcion-formulario").textContent = "Completa la información del usuario.";
+    $("btn-guardar").textContent = "Guardar usuario"; $("btn-cancelar").hidden = true;
   }
-});
-$("btn-nuevo").addEventListener("click",()=>{resetForm();$("nombre").focus();});
-$("btn-cancelar").addEventListener("click",resetForm);
-cargarFacultades();cargarCarreras("");render();
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!carSelect.value) { alert("Selecciona una facultad y una carrera registradas."); return; }
+    const cuerpo = {
+      nombre: $("nombre").value.trim(), cedula: $("cedula").value.trim(), nivel: $("nivel").value,
+      carreraCodigo: carSelect.value, rol: $("rol").value, contrasena: $("contrasena").value
+    };
+    try {
+      if (cedulaEditando) await THOT.put("/api/usuarios/" + encodeURIComponent(cedulaEditando), cuerpo);
+      else await THOT.post("/api/usuarios", cuerpo);
+    } catch (err) { THOT.error(err); return; }
+    resetForm(); cargar();
+  });
+  lista.addEventListener("click", async e => {
+    const item = e.target.closest(".registro"); if (!item) return;
+    const cedula = item.dataset.cedula, u = usuarios.find(x => x.cedula === cedula);
+    if (e.target.classList.contains("btn-editar")) {
+      cedulaEditando = cedula;
+      $("nombre").value = u.nombre; $("cedula").value = u.cedula; $("correo").value = u.correo;
+      $("nivel").value = u.nivel; cargarFacultades(u.facultadCodigo); cargarCarreras(u.facultadCodigo, u.carreraCodigo);
+      $("rol").value = u.rol; $("contrasena").value = ""; $("contrasena").required = false;
+      $("contrasena").placeholder = "Dejar en blanco para conservar la actual";
+      $("titulo-formulario").textContent = "Editar usuario";
+      $("descripcion-formulario").textContent = "Modifica los datos del usuario seleccionado.";
+      $("btn-guardar").textContent = "Guardar cambios"; $("btn-cancelar").hidden = false;
+    }
+    if (e.target.classList.contains("btn-eliminar") && confirm("¿Eliminar el usuario " + u.nombre + "?")) {
+      try { await THOT.del("/api/usuarios/" + encodeURIComponent(cedula)); } catch (err) { THOT.error(err); return; }
+      if (cedulaEditando === cedula) resetForm();
+      cargar();
+    }
+  });
+  $("btn-nuevo").addEventListener("click", () => { resetForm(); $("nombre").focus(); });
+  $("btn-cancelar").addEventListener("click", resetForm);
+  cargar();
+})();
 </script>
 </body></html>
