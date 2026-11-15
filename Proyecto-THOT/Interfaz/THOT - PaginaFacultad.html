@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THOT | Facultades</title>
-  <link rel="stylesheet" href="../Estilo/THOT - PaginaFacultad.css">
+  <link rel="stylesheet" href="../Estilo/THOT - PaginaFacultad.css"><link rel="stylesheet" href="../Estilo/THOT - Comun.css">
 </head>
 <body>
 
@@ -22,18 +22,17 @@
 <div class="contenedor">
 
 <aside class="barra-lateral">
-  <div class="usuario">
-    <div class="avatar">U</div>
-    <div><strong>Usuario</strong><small>Administrador</small></div>
-  </div>
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Rol</small></div></div>
   <nav class="navegacion">
-    <a href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
-    <a href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
-    <a href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
-    <a href="THOT - PaginaCarrera.html" ><span>▣</span>Carreras</a>
-    <a href="THOT - PaginaFacultad.html" class="activo"><span>▥</span>Facultades</a>
-    <a href="#"><span>☷</span>Ver materias<br>asignadas</a>
-  </nav>
+<a data-modulo="horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+<a data-modulo="materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+<a data-modulo="usuarios" href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
+<a data-modulo="carreras" href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+<a data-modulo="facultades" href="THOT - PaginaFacultad.html" class="activo"><span>▥</span>Facultades</a>
+<a data-modulo="espacios" href="THOT - PaginaEspacio.html"><span>⌂</span>Espacios</a>
+<a data-modulo="asignadas" href="THOT - PaginaAsignadas.html"><span>☷</span>Ver materias<br>asignadas</a>
+<a href="#" id="cerrar-sesion"><span>⎋</span>Cerrar sesión</a>
+</nav>
 </aside>
 
   <main class="contenido">
@@ -47,7 +46,7 @@
         <div class="cabecera-listado">
           <div><label>REGISTROS ACADÉMICOS</label><h2>Lista de facultades</h2>
           <p>Facultades registradas en el sistema</p></div>
-          <button class="btn-agregar" id="btn-nueva" type="button" title="Agregar facultad">+</button>
+          <button class="btn-agregar solo-gestion" id="btn-nueva" type="button" title="Agregar facultad">+</button>
         </div>
         <div class="resumen-listado"><span>Facultades disponibles</span><strong id="contador">0 facultades</strong></div>
         <ul class="lista-registros" id="lista-facultades"></ul>
@@ -57,7 +56,7 @@
         </div>
       </section>
 
-      <section class="panel formulario-panel">
+      <section class="panel formulario-panel solo-gestion">
         <div class="cabecera">
           <div><label>GESTIÓN ACADÉMICA</label><h2 id="titulo-formulario">Agregar facultad</h2>
           <p id="descripcion-formulario">Completa la información de la facultad.</p></div>
@@ -79,136 +78,67 @@
   </main>
 </div>
 
+
+<script src="thot-comun.js"></script>
 <script>
-const STORAGE_FACULTADES = "thot_facultades";
-const form = document.getElementById("form-facultad");
-const lista = document.getElementById("lista-facultades");
-const contador = document.getElementById("contador");
-const vacia = document.getElementById("lista-vacia");
-let codigoEditando = null;
+(async () => {
+  try { await THOT.iniciar("facultades"); } catch (e) { return; }
+  const gest = THOT.puede("facultades", "gestionar");
+  const $ = id => document.getElementById(id);
+  const form = $("form-facultad"), lista = $("lista-facultades");
+  let codigoEditando = null, facultades = [];
 
-function obtenerFacultades() {
-  return JSON.parse(localStorage.getItem(STORAGE_FACULTADES) || "[]");
-}
-function guardarFacultades(facultades) {
-  localStorage.setItem(STORAGE_FACULTADES, JSON.stringify(facultades));
-}
-function actualizarLista() {
-  const facultades = obtenerFacultades();
-  lista.innerHTML = "";
-  facultades.forEach(facultad => {
-    const item = document.createElement("li");
-    item.className = "registro";
-    item.dataset.codigo = facultad.codigo;
-
-    const info = document.createElement("div");
-    info.className = "registro-info";
-    const punto = document.createElement("span");
-    punto.className = "punto";
-    const datos = document.createElement("div");
-    const nombre = document.createElement("strong");
-    nombre.textContent = facultad.nombre;
-    const codigo = document.createElement("small");
-    codigo.textContent = "Código: " + facultad.codigo;
-    datos.append(nombre, codigo);
-    info.append(punto, datos);
-
-    const acciones = document.createElement("div");
-    acciones.className = "acciones-item";
-    const editar = document.createElement("button");
-    editar.className = "btn-editar";
-    editar.type = "button";
-    editar.textContent = "Editar";
-    const eliminar = document.createElement("button");
-    eliminar.className = "btn-eliminar";
-    eliminar.type = "button";
-    eliminar.textContent = "Eliminar";
-    acciones.append(editar, eliminar);
-    item.append(info, acciones);
-    lista.append(item);
-  });
-  contador.textContent = facultades.length + (facultades.length === 1 ? " facultad" : " facultades");
-  vacia.hidden = facultades.length > 0;
-}
-function limpiarFormulario() {
-  form.reset();
-  codigoEditando = null;
-  document.getElementById("titulo-formulario").textContent = "Agregar facultad";
-  document.getElementById("descripcion-formulario").textContent = "Completa la información de la facultad.";
-  document.getElementById("btn-guardar").textContent = "Guardar facultad";
-  document.getElementById("btn-cancelar").hidden = true;
-}
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  const nombre = document.getElementById("nombre").value.trim();
-  const codigo = document.getElementById("codigo").value.trim();
-  const facultades = obtenerFacultades();
-
-  const duplicado = facultades.some(f => f.codigo.toLowerCase() === codigo.toLowerCase()
-    && f.codigo !== codigoEditando);
-  if (duplicado) {
-    alert("Ya existe una facultad con ese código.");
-    return;
+  async function cargar() {
+    try { facultades = await THOT.get("/api/facultades"); } catch (e) { THOT.error(e); }
+    actualizarLista();
   }
-
-  if (codigoEditando !== null) {
-    const anterior = facultades.find(f => f.codigo === codigoEditando);
-    const codigoAnterior = codigoEditando;
-    const indice = facultades.findIndex(f => f.codigo === codigoEditando);
-    facultades[indice] = { nombre, codigo };
-    // Actualiza también el código y nombre de la facultad guardada en las carreras.
-    const carreras = JSON.parse(localStorage.getItem("thot_carreras") || "[]");
-    carreras.forEach(c => {
-      if (c.facultadCodigo === codigoAnterior) {
-        c.facultadCodigo = codigo;
-        c.facultadNombre = nombre;
-      }
+  function actualizarLista() {
+    lista.innerHTML = "";
+    facultades.forEach(f => {
+      const li = THOT.fila("registro", "registro-info", f.nombre, "Código: " + f.codigo, gest);
+      li.dataset.codigo = f.codigo;
+      lista.append(li);
     });
-    localStorage.setItem("thot_carreras", JSON.stringify(carreras));
-  } else {
-    facultades.push({ nombre, codigo });
+    $("contador").textContent = facultades.length + (facultades.length === 1 ? " facultad" : " facultades");
+    $("lista-vacia").hidden = facultades.length > 0;
   }
-  guardarFacultades(facultades);
-  limpiarFormulario();
-  actualizarLista();
-});
-lista.addEventListener("click", event => {
-  const item = event.target.closest(".registro");
-  if (!item) return;
-  const codigo = item.dataset.codigo;
-  const facultades = obtenerFacultades();
-  const facultad = facultades.find(f => f.codigo === codigo);
-
-  if (event.target.classList.contains("btn-editar")) {
-    codigoEditando = codigo;
-    document.getElementById("nombre").value = facultad.nombre;
-    document.getElementById("codigo").value = facultad.codigo;
-    document.getElementById("titulo-formulario").textContent = "Editar facultad";
-    document.getElementById("descripcion-formulario").textContent = "Modifica los datos de la facultad seleccionada.";
-    document.getElementById("btn-guardar").textContent = "Guardar cambios";
-    document.getElementById("btn-cancelar").hidden = false;
+  function limpiarFormulario() {
+    form.reset(); codigoEditando = null;
+    $("titulo-formulario").textContent = "Agregar facultad";
+    $("descripcion-formulario").textContent = "Completa la información de la facultad.";
+    $("btn-guardar").textContent = "Guardar facultad";
+    $("btn-cancelar").hidden = true;
   }
-
-  if (event.target.classList.contains("btn-eliminar")) {
-    const carreras = JSON.parse(localStorage.getItem("thot_carreras") || "[]");
-    const relacionadas = carreras.filter(c => c.facultadCodigo === codigo);
-    if (relacionadas.length > 0) {
-      alert("No se puede eliminar esta facultad porque tiene carreras asociadas. Primero cambia o elimina esas carreras.");
-      return;
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const cuerpo = { nombre: $("nombre").value.trim(), codigo: $("codigo").value.trim() };
+    try {
+      if (codigoEditando !== null) await THOT.put("/api/facultades/" + encodeURIComponent(codigoEditando), cuerpo);
+      else await THOT.post("/api/facultades", cuerpo);
+    } catch (err) { THOT.error(err); return; }
+    limpiarFormulario(); cargar();
+  });
+  lista.addEventListener("click", async e => {
+    const item = e.target.closest(".registro"); if (!item) return;
+    const codigo = item.dataset.codigo, f = facultades.find(x => x.codigo === codigo);
+    if (e.target.classList.contains("btn-editar")) {
+      codigoEditando = codigo;
+      $("nombre").value = f.nombre; $("codigo").value = f.codigo;
+      $("titulo-formulario").textContent = "Editar facultad";
+      $("descripcion-formulario").textContent = "Modifica los datos de la facultad seleccionada.";
+      $("btn-guardar").textContent = "Guardar cambios";
+      $("btn-cancelar").hidden = false;
     }
-    if (confirm("¿Eliminar la facultad " + facultad.nombre + "?")) {
-      guardarFacultades(facultades.filter(f => f.codigo !== codigo));
+    if (e.target.classList.contains("btn-eliminar") && confirm("¿Eliminar la facultad " + f.nombre + "?")) {
+      try { await THOT.del("/api/facultades/" + encodeURIComponent(codigo)); } catch (err) { THOT.error(err); return; }
       if (codigoEditando === codigo) limpiarFormulario();
-      actualizarLista();
+      cargar();
     }
-  }
-});
-document.getElementById("btn-nueva").addEventListener("click", () => {
-  limpiarFormulario();
-  document.getElementById("nombre").focus();
-});
-document.getElementById("btn-cancelar").addEventListener("click", limpiarFormulario);
-actualizarLista();
+  });
+  $("btn-nueva").addEventListener("click", () => { limpiarFormulario(); $("nombre").focus(); });
+  $("btn-cancelar").addEventListener("click", limpiarFormulario);
+  cargar();
+})();
 </script>
 </body>
 </html>
