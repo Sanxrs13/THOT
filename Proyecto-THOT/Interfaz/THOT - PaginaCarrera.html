@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THOT | Carreras</title>
-  <link rel="stylesheet" href="../Estilo/THOT - PaginaCarrera.css">
+  <link rel="stylesheet" href="../Estilo/THOT - PaginaCarrera.css"><link rel="stylesheet" href="../Estilo/THOT - Comun.css">
 </head>
 <body>
 
@@ -22,18 +22,17 @@
 <div class="contenedor">
 
 <aside class="barra-lateral">
-  <div class="usuario">
-    <div class="avatar">U</div>
-    <div><strong>Usuario</strong><small>Administrador</small></div>
-  </div>
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Rol</small></div></div>
   <nav class="navegacion">
-    <a href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
-    <a href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
-    <a href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
-    <a href="THOT - PaginaCarrera.html" class="activo"><span>▣</span>Carreras</a>
-    <a href="THOT - PaginaFacultad.html" ><span>▥</span>Facultades</a>
-    <a href="#"><span>☷</span>Ver materias<br>asignadas</a>
-  </nav>
+<a data-modulo="horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+<a data-modulo="materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+<a data-modulo="usuarios" href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
+<a data-modulo="carreras" href="THOT - PaginaCarrera.html" class="activo"><span>▣</span>Carreras</a>
+<a data-modulo="facultades" href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a>
+<a data-modulo="espacios" href="THOT - PaginaEspacio.html"><span>⌂</span>Espacios</a>
+<a data-modulo="asignadas" href="THOT - PaginaAsignadas.html"><span>☷</span>Ver materias<br>asignadas</a>
+<a href="#" id="cerrar-sesion"><span>⎋</span>Cerrar sesión</a>
+</nav>
 </aside>
 
   <main class="contenido">
@@ -47,7 +46,7 @@
         <div class="cabecera-listado">
           <div><label>REGISTROS ACADÉMICOS</label><h2>Lista de carreras</h2>
           <p>Carreras registradas en el sistema</p></div>
-          <button class="btn-agregar" id="btn-nueva" type="button" title="Agregar carrera">+</button>
+          <button class="btn-agregar solo-gestion" id="btn-nueva" type="button" title="Agregar carrera">+</button>
         </div>
         <div class="resumen-listado"><span>Carreras disponibles</span><strong id="contador">0 carreras</strong></div>
         <ul class="lista-registros" id="lista-carreras"></ul>
@@ -57,7 +56,7 @@
         </div>
       </section>
 
-      <section class="panel formulario-panel">
+      <section class="panel formulario-panel solo-gestion">
         <div class="cabecera">
           <div><label>GESTIÓN ACADÉMICA</label><h2 id="titulo-formulario">Agregar carrera</h2>
           <p id="descripcion-formulario">Completa la información de la carrera.</p></div>
@@ -83,146 +82,76 @@
   </main>
 </div>
 
-<script>
-const STORAGE_FACULTADES = "thot_facultades";
-const STORAGE_CARRERAS = "thot_carreras";
-const form = document.getElementById("form-carrera");
-const lista = document.getElementById("lista-carreras");
-const selector = document.getElementById("facultad");
-const contador = document.getElementById("contador");
-const vacia = document.getElementById("lista-vacia");
-let codigoEditando = null;
 
-function obtenerFacultades() {
-  return JSON.parse(localStorage.getItem(STORAGE_FACULTADES) || "[]");
-}
-function obtenerCarreras() {
-  return JSON.parse(localStorage.getItem(STORAGE_CARRERAS) || "[]");
-}
-function cargarFacultades(codigoSeleccionado = "") {
-  const facultades = obtenerFacultades();
-  selector.innerHTML = '<option value="">Seleccione una facultad</option>';
-  facultades.forEach(facultad => {
-    const opcion = document.createElement("option");
-    opcion.value = facultad.codigo;
-    opcion.textContent = facultad.nombre;
-    selector.append(opcion);
+<script src="thot-comun.js"></script>
+<script>
+(async () => {
+  try { await THOT.iniciar("carreras"); } catch (e) { return; }
+  const gest = THOT.puede("carreras", "gestionar");
+  const $ = id => document.getElementById(id);
+  const form = $("form-carrera"), lista = $("lista-carreras"), selector = $("facultad");
+  let codigoEditando = null, carreras = [], facultades = [];
+
+  async function cargar() {
+    try {
+      [facultades, carreras] = await Promise.all([THOT.get("/api/facultades"), THOT.get("/api/carreras")]);
+    } catch (e) { THOT.error(e); }
+    cargarFacultades(selector.value); actualizarLista();
+  }
+  function cargarFacultades(sel = "") {
+    THOT.llenarSelect(selector, facultades, f => f.codigo, f => f.nombre, "Seleccione una facultad", sel);
+    $("ayuda-facultad").textContent = facultades.length
+      ? "Selecciona la facultad donde estará registrada esta carrera."
+      : "Todavía no hay facultades. Registra una en la página Facultades.";
+  }
+  function actualizarLista() {
+    lista.innerHTML = "";
+    carreras.forEach(c => {
+      const li = THOT.fila("registro", "registro-info", c.nombre, c.codigo + " · " + c.facultadNombre, gest);
+      li.dataset.codigo = c.codigo;
+      lista.append(li);
+    });
+    $("contador").textContent = carreras.length + (carreras.length === 1 ? " carrera" : " carreras");
+    $("lista-vacia").hidden = carreras.length > 0;
+  }
+  function limpiarFormulario() {
+    form.reset(); codigoEditando = null; cargarFacultades();
+    $("titulo-formulario").textContent = "Agregar carrera";
+    $("descripcion-formulario").textContent = "Completa la información de la carrera.";
+    $("btn-guardar").textContent = "Guardar carrera";
+    $("btn-cancelar").hidden = true;
+  }
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!selector.value) { alert("Primero registra una facultad y selecciónala."); return; }
+    const cuerpo = { nombre: $("nombre").value.trim(), codigo: $("codigo").value.trim(), facultadCodigo: selector.value };
+    try {
+      if (codigoEditando !== null) await THOT.put("/api/carreras/" + encodeURIComponent(codigoEditando), cuerpo);
+      else await THOT.post("/api/carreras", cuerpo);
+    } catch (err) { THOT.error(err); return; }
+    limpiarFormulario(); cargar();
   });
-  selector.value = codigoSeleccionado;
-  document.getElementById("ayuda-facultad").textContent = facultades.length
-    ? "Selecciona la facultad donde estará registrada esta carrera."
-    : "Todavía no hay facultades. Registra una en la página Facultades.";
-}
-function actualizarLista() {
-  const carreras = obtenerCarreras();
-  lista.innerHTML = "";
-  carreras.forEach(carrera => {
-    const item = document.createElement("li");
-    item.className = "registro";
-    item.dataset.codigo = carrera.codigo;
-    const info = document.createElement("div");
-    info.className = "registro-info";
-    const punto = document.createElement("span");
-    punto.className = "punto";
-    const datos = document.createElement("div");
-    const nombre = document.createElement("strong");
-    nombre.textContent = carrera.nombre;
-    const detalle = document.createElement("small");
-    detalle.textContent = carrera.codigo + " · " + carrera.facultadNombre;
-    datos.append(nombre, detalle);
-    info.append(punto, datos);
-    const acciones = document.createElement("div");
-    acciones.className = "acciones-item";
-    const editar = document.createElement("button");
-    editar.className = "btn-editar"; editar.type = "button"; editar.textContent = "Editar";
-    const eliminar = document.createElement("button");
-    eliminar.className = "btn-eliminar"; eliminar.type = "button"; eliminar.textContent = "Eliminar";
-    acciones.append(editar, eliminar);
-    item.append(info, acciones);
-    lista.append(item);
+  lista.addEventListener("click", async e => {
+    const item = e.target.closest(".registro"); if (!item) return;
+    const codigo = item.dataset.codigo, c = carreras.find(x => x.codigo === codigo);
+    if (e.target.classList.contains("btn-editar")) {
+      codigoEditando = codigo;
+      $("nombre").value = c.nombre; $("codigo").value = c.codigo; cargarFacultades(c.facultadCodigo);
+      $("titulo-formulario").textContent = "Editar carrera";
+      $("descripcion-formulario").textContent = "Modifica los datos de la carrera seleccionada.";
+      $("btn-guardar").textContent = "Guardar cambios";
+      $("btn-cancelar").hidden = false;
+    }
+    if (e.target.classList.contains("btn-eliminar") && confirm("¿Eliminar la carrera " + c.nombre + "?")) {
+      try { await THOT.del("/api/carreras/" + encodeURIComponent(codigo)); } catch (err) { THOT.error(err); return; }
+      if (codigoEditando === codigo) limpiarFormulario();
+      cargar();
+    }
   });
-  contador.textContent = carreras.length + (carreras.length === 1 ? " carrera" : " carreras");
-  vacia.hidden = carreras.length > 0;
-}
-function limpiarFormulario() {
-  form.reset();
-  codigoEditando = null;
-  document.getElementById("titulo-formulario").textContent = "Agregar carrera";
-  document.getElementById("descripcion-formulario").textContent = "Completa la información de la carrera.";
-  document.getElementById("btn-guardar").textContent = "Guardar carrera";
-  document.getElementById("btn-cancelar").hidden = true;
-  cargarFacultades();
-}
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  const nombre = document.getElementById("nombre").value.trim();
-  const codigo = document.getElementById("codigo").value.trim();
-  const facultadCodigo = selector.value;
-  const facultad = obtenerFacultades().find(f => f.codigo === facultadCodigo);
-  if (!facultad) {
-    alert("Primero registra una facultad y selecciónala.");
-    return;
-  }
-  const carreras = obtenerCarreras();
-  const duplicado = carreras.some(c => c.codigo.toLowerCase() === codigo.toLowerCase()
-    && c.codigo !== codigoEditando);
-  if (duplicado) {
-    alert("Ya existe una carrera con ese código.");
-    return;
-  }
-  const nuevaCarrera = {
-    nombre,
-    codigo,
-    facultadCodigo: facultad.codigo,
-    facultadNombre: facultad.nombre
-  };
-  if (codigoEditando !== null) {
-    const indice = carreras.findIndex(c => c.codigo === codigoEditando);
-    carreras[indice] = nuevaCarrera;
-  } else {
-    carreras.push(nuevaCarrera);
-  }
-  localStorage.setItem(STORAGE_CARRERAS, JSON.stringify(carreras));
-  limpiarFormulario();
-  actualizarLista();
-});
-lista.addEventListener("click", event => {
-  const item = event.target.closest(".registro");
-  if (!item) return;
-  const codigo = item.dataset.codigo;
-  const carreras = obtenerCarreras();
-  const carrera = carreras.find(c => c.codigo === codigo);
-  if (event.target.classList.contains("btn-editar")) {
-    codigoEditando = codigo;
-    document.getElementById("nombre").value = carrera.nombre;
-    document.getElementById("codigo").value = carrera.codigo;
-    cargarFacultades(carrera.facultadCodigo);
-    document.getElementById("titulo-formulario").textContent = "Editar carrera";
-    document.getElementById("descripcion-formulario").textContent = "Modifica los datos de la carrera seleccionada.";
-    document.getElementById("btn-guardar").textContent = "Guardar cambios";
-    document.getElementById("btn-cancelar").hidden = false;
-  }
-  if (event.target.classList.contains("btn-eliminar") &&
-      confirm("¿Eliminar la carrera " + carrera.nombre + "?")) {
-    localStorage.setItem(STORAGE_CARRERAS, JSON.stringify(carreras.filter(c => c.codigo !== codigo)));
-    if (codigoEditando === codigo) limpiarFormulario();
-    actualizarLista();
-  }
-});
-document.getElementById("btn-nueva").addEventListener("click", () => {
-  limpiarFormulario();
-  document.getElementById("nombre").focus();
-});
-document.getElementById("btn-cancelar").addEventListener("click", limpiarFormulario);
-window.addEventListener("storage", event => {
-  if (event.key === STORAGE_FACULTADES) {
-    const seleccion = selector.value;
-    cargarFacultades(seleccion);
-    actualizarLista();
-  }
-});
-cargarFacultades();
-actualizarLista();
+  $("btn-nueva").addEventListener("click", () => { limpiarFormulario(); $("nombre").focus(); });
+  $("btn-cancelar").addEventListener("click", limpiarFormulario);
+  cargar();
+})();
 </script>
 </body>
 </html>
