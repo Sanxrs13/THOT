@@ -1,0 +1,77 @@
+
+:root{
+  --oscuro:#2f3035;
+  --dorado:#e5a735;
+  --dorado-oscuro:#bd8421;
+  --fondo:#f1f2f5;
+  --texto:#34343a;
+  --gris:#777982;
+  --borde:#e1e2e7;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--fondo);color:var(--texto);font-family:Arial,Helvetica,sans-serif}
+.encabezado{min-height:96px;padding:10px 28px;display:flex;align-items:center;justify-content:space-between;background:var(--oscuro);border-bottom:3px solid var(--dorado);box-shadow:0 3px 12px #0001}
+.marca-uleam,.marca-thot{display:flex;align-items:center;gap:18px;color:var(--dorado);font:bold clamp(25px,3vw,38px) Georgia,serif;letter-spacing:2px}
+.marca-uleam img{width:64px;height:70px;object-fit:contain}
+.marca-thot{gap:22px;font-size:clamp(25px,3vw,36px)}
+.marca-thot img{width:68px;height:68px;object-fit:contain}
+.contenedor{display:flex;min-height:calc(100vh - 96px)}
+.barra-lateral{flex:0 0 245px;background:#fff;border-right:1px solid var(--borde);box-shadow:3px 0 12px #00000008}
+.usuario{min-height:94px;padding:20px 22px;display:flex;align-items:center;gap:13px;border-bottom:1px solid var(--borde)}
+.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#f3dba9;border:2px solid var(--dorado);font-weight:bold}
+.usuario strong,.usuario small{display:block}
+.usuario small{margin-top:5px;color:var(--gris);font-size:12px}
+.navegacion{padding:12px 10px;display:grid;gap:5px}
+.navegacion a{min-height:46px;padding:11px 13px;display:flex;align-items:center;gap:13px;border-radius:8px;color:#4b4c52;text-decoration:none;font-size:14px;line-height:1.35}
+.navegacion a:hover{background:#fbf3e3;color:var(--dorado-oscuro)}
+.navegacion a.activo{background:var(--oscuro);color:var(--dorado);font-weight:bold}
+.navegacion a span{width:20px;text-align:center;font-size:18px}
+.contenido{flex:1;min-width:0;padding:28px}
+.titulo-pagina{display:flex;align-items:center;gap:14px;margin:2px 0 23px}
+.linea-dorada{width:5px;height:43px;border-radius:5px;background:var(--dorado)}
+.titulo-pagina h1{margin:0;color:var(--oscuro);font:27px Georgia,serif}
+.titulo-pagina p{margin:5px 0 0;color:var(--gris);font-size:13px}
+.columnas{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,1fr);gap:24px;align-items:stretch}
+.panel{min-height:510px;padding:25px;background:#fff;border:1px solid var(--borde);border-radius:24px;box-shadow:0 7px 24px #20212a0b}
+.formulario-panel{background:#fffefa}
+.cabecera,.cabecera-listado{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:28px}
+.cabecera label,.cabecera-listado label{display:inline-block;margin-bottom:9px;color:var(--dorado-oscuro);font-size:10px;font-weight:bold;letter-spacing:1.5px}
+.panel h2{margin:0;color:var(--oscuro);font:24px Georgia,serif}
+.cabecera p,.cabecera-listado p{margin:7px 0 0;color:var(--gris);font-size:13px;line-height:1.5}
+.icono-panel{width:43px;height:43px;display:grid;place-items:center;border-radius:12px;background:#fbf1dc;color:var(--dorado-oscuro);font-size:22px}
+.campo{margin-bottom:20px}
+.campo label{display:block;margin:0 0 8px;color:#4d4e54;font-size:13px;font-weight:600}
+.campo input,.campo select{width:100%;height:52px;padding:0 15px;border:1.5px solid #d9dbe1;border-radius:10px;outline:none;background:#fff;color:var(--texto);font:inherit}
+.campo input:focus,.campo select:focus{border-color:var(--dorado);box-shadow:0 0 0 3px #e5a73525}
+.campo input::placeholder{color:#a0a1a8}
+.ayuda-select{display:block;margin-top:8px;color:var(--gris);font-size:11px;line-height:1.4}
+.acciones-formulario{display:flex;gap:10px;margin-top:27px;flex-wrap:wrap}
+.btn-principal{min-height:46px;padding:0 22px;border:0;border-radius:9px;background:var(--oscuro);color:var(--dorado);font-weight:bold;cursor:pointer}
+.btn-principal:hover{background:#42434a}
+.btn-secundario{min-height:46px;padding:0 17px;border:1px solid var(--borde);border-radius:9px;background:#fff;color:var(--gris);cursor:pointer}
+.nota-formulario{margin:22px 0 0;color:#92939a;font-size:12px}
+.cabecera-listado{align-items:center;margin-bottom:22px}
+.btn-agregar{width:43px;height:43px;flex:0 0 43px;border:1.5px solid var(--dorado);border-radius:11px;background:#fffaf0;color:var(--dorado-oscuro);font-size:27px;line-height:1;cursor:pointer}
+.btn-agregar:hover{background:var(--dorado);color:#fff}
+.resumen-listado{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;margin-bottom:10px;border-radius:9px;background:#f7f7f8;color:var(--gris);font-size:12px}
+.resumen-listado strong{color:var(--oscuro)}
+.lista-registros{list-style:none;padding:0;margin:0}
+.registro{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:17px 5px;border-bottom:1px solid #eee}
+.registro-info{display:flex;align-items:center;gap:11px;min-width:0}
+.punto{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:var(--dorado)}
+.registro-info strong{display:block;color:var(--texto);font-size:13px;line-height:1.4}
+.registro-info small{display:block;margin-top:5px;color:var(--gris);font-size:11px}
+.acciones-item{display:flex;gap:6px;flex-shrink:0}
+.btn-editar,.btn-eliminar{padding:7px 9px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer}
+.btn-editar{border:1px solid #e8d3a8;background:#fffaf0;color:#986a1e}
+.btn-eliminar{border:1px solid #ead1ce;background:#fff8f7;color:#a4544b}
+.btn-editar:hover{background:#f8edda}
+.btn-eliminar:hover{background:#f8e8e6}
+.lista-vacia{min-height:180px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:9px;text-align:center;color:var(--gris)}
+.lista-vacia strong{color:var(--texto);font-size:14px}
+.lista-vacia small{font-size:12px}
+.lista-vacia[hidden]{display:none}
+[hidden]{display:none!important}
+@media(max-width:1050px){.barra-lateral{flex-basis:205px}.columnas{grid-template-columns:minmax(0,1fr)}.panel{min-height:auto}}
+@media(max-width:800px){.encabezado{min-height:78px;padding:10px 16px}.marca-uleam img{width:48px;height:52px}.marca-thot img{width:48px;height:48px}.contenedor{min-height:calc(100vh - 78px)}.contenido{padding:18px}}
+@media(max-width:560px){.contenedor{flex-direction:column}.barra-lateral{flex-basis:auto;border-right:0;border-bottom:1px solid var(--borde)}.usuario{min-height:auto;padding:12px 16px}.navegacion{display:flex;overflow-x:auto;padding:8px}.navegacion a{flex:0 0 auto}.contenido{padding:14px}.marca-uleam,.marca-thot{gap:9px;letter-spacing:1px}.marca-uleam span,.marca-thot span{font-size:21px}.panel{padding:19px;border-radius:18px}.registro{align-items:flex-start}.acciones-item{flex-direction:column}}

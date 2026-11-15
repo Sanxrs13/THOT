@@ -1,0 +1,60 @@
+/* Estilos compartidos (se cargan despues del css propio de cada pagina) */
+
+/* barra lateral */
+.navegacion a.activo,.navegacion a.activo-horarios,.navegacion a.activo-materias{background:#2f3035;color:#e5a735;font-weight:bold}
+.navegacion a[hidden]{display:none}
+.navegacion a#cerrar-sesion{margin-top:14px;border-top:1px solid #e1e2e7;border-radius:0 0 8px 8px;color:#a4544b}
+.navegacion a#cerrar-sesion:hover{background:#f8e8e6;color:#a4544b}
+
+/* roles de solo lectura: se oculta el formulario y la lista ocupa todo el ancho */
+[hidden]{display:none!important}
+body.solo-lectura .columnas{grid-template-columns:minmax(0,1fr)}
+body.solo-lectura .panel{min-height:auto}
+
+/* campos extra */
+.campo select{width:100%;height:52px;padding:0 15px;border:1.5px solid #d9dbe1;border-radius:10px;outline:none;background:#fff;color:#34343a;font:inherit}
+.campo select:focus{border-color:#e5a735;box-shadow:0 0 0 3px #e5a73525}
+.campo select:disabled,.campo input:disabled{background:#f4f4f6;color:#999}
+.campo-check{display:flex;align-items:center;gap:11px;margin-bottom:20px;padding:13px 15px;border:1.5px solid #d9dbe1;border-radius:10px;background:#fff;cursor:pointer}
+.campo-check input{width:18px;height:18px;accent-color:#bd8421;cursor:pointer}
+.campo-check span{color:#4d4e54;font-size:13px;font-weight:600}
+.etiqueta{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:20px;background:#fbf1dc;color:#986a1e;font-size:10px;font-weight:bold;letter-spacing:.3px;vertical-align:middle}
+.mensaje-error{margin:14px 0 0;padding:11px 14px;border:1px solid #ead1ce;border-radius:9px;background:#fff8f7;color:#a4544b;font-size:13px}
+.mensaje-ok{margin:14px 0 0;padding:11px 14px;border:1px solid #cfe3cf;border-radius:9px;background:#f4fbf4;color:#3d7a3d;font-size:13px}
+
+/* login */
+#mensaje_login{margin:6px 5px 0;color:#a4544b;font-size:14px;min-height:20px}
+
+/* pagina de horarios */
+.btn-nueva-asignacion{min-height:44px;padding:0 18px;border:1.5px solid #e5a735;border-radius:9px;background:#fffaf0;color:#986a1e;font-weight:bold;cursor:pointer}
+.btn-nueva-asignacion:hover{background:#e5a735;color:#fff}
+.panel-asignacion{margin-top:22px;padding:22px 26px;background:#fffefa;border:1px solid #e1e2e7;border-radius:20px;box-shadow:0 7px 24px #20212a0b}
+.panel-asignacion h2{margin:0 0 4px;color:#2f3035;font:22px Georgia,serif}
+.panel-asignacion>p{margin:0 0 18px;color:#777982;font-size:13px}
+.form-rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px}
+.form-rejilla .campo{margin-bottom:12px}
+.form-rejilla .campo input,.form-rejilla .campo select{height:46px}
+.cuadro-horario{overflow-x:auto}
+.rejilla-horario{position:relative;display:grid;grid-template-columns:64px repeat(5,minmax(130px,1fr));min-width:760px;border:1px solid #e8e1d4;border-radius:12px;background:#fff}
+.rejilla-horario .cab{padding:11px 6px;text-align:center;background:#2f3035;color:#e5a735;font-size:12px;font-weight:bold;letter-spacing:.5px}
+.rejilla-horario .cab:first-child{border-top-left-radius:11px}.rejilla-horario .cab:last-of-type{border-top-right-radius:11px}
+.rejilla-horario .horas{border-right:1px solid #eee7dc}
+.rejilla-horario .hora{height:56px;padding:6px 8px;color:#777982;font-size:11px;text-align:right;border-top:1px solid #f0ebe0}
+.rejilla-horario .dia{position:relative;border-left:1px solid #f0ebe0;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 55px,#f0ebe0 55px,#f0ebe0 56px)}
+.bloque-clase{position:absolute;overflow:hidden;padding:6px 8px;border-radius:8px;border-left:4px solid #bd8421;background:#fbf1dc;color:#34343a;font-size:11px;line-height:1.35;box-shadow:0 2px 6px #20212a14}
+.bloque-clase.lab{background:#2f3035;border-left-color:#e5a735;color:#f4f4f6}
+.bloque-clase strong{display:block;font-size:12px;margin-bottom:2px}
+.bloque-clase small{display:block;opacity:.85}
+.bloque-clase .quitar{position:absolute;top:3px;right:4px;width:20px;height:20px;border:0;border-radius:5px;background:#0000001a;color:inherit;font-size:14px;line-height:1;cursor:pointer}
+.bloque-clase .quitar:hover{background:#c4554b;color:#fff}
+.leyenda{display:flex;gap:18px;margin:14px 0 0;color:#777982;font-size:12px}
+.leyenda i{display:inline-block;width:12px;height:12px;margin-right:6px;border-radius:3px;vertical-align:-1px;background:#fbf1dc;border:1px solid #bd8421}
+.leyenda i.lab{background:#2f3035;border-color:#e5a735}
+@media(max-width:800px){.panel-asignacion{padding:16px}}
+.filtros-academicos{display:flex;gap:12px;flex-wrap:wrap}
+.filtros-derecha{flex-wrap:wrap;align-items:center}
+.acciones-formulario{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn-principal{min-height:46px;padding:0 22px;border:0;border-radius:9px;background:#2f3035;color:#e5a735;font-weight:bold;cursor:pointer}
+.btn-principal:hover{background:#42434a}
+.btn-secundario{min-height:46px;padding:0 17px;border:1px solid #e1e2e7;border-radius:9px;background:#fff;color:#777982;cursor:pointer}
+.ayuda-select{display:block;margin-top:8px;color:#777982;font-size:11px;line-height:1.4}

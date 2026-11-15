@@ -1,0 +1,28 @@
+
+:root{--oscuro:#2f3035;--dorado:#e5a735;--dorado2:#bd8421;--fondo:#f1f2f5;--texto:#34343a;--gris:#777982;--borde:#e1e2e7}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--fondo);color:var(--texto);font-family:Arial,Helvetica,sans-serif}
+.encabezado{min-height:96px;padding:10px 28px;display:flex;align-items:center;justify-content:space-between;background:var(--oscuro);border-bottom:3px solid var(--dorado);box-shadow:0 3px 12px #0001}
+.marca-uleam,.marca-thot{display:flex;align-items:center;gap:18px;color:var(--dorado);font:bold clamp(25px,3vw,38px) Georgia,serif;letter-spacing:2px}
+.marca-uleam img{width:64px;height:70px;object-fit:contain}.marca-thot{gap:22px;font-size:clamp(25px,3vw,36px)}.marca-thot img{width:68px;height:68px;object-fit:contain}
+.contenedor{display:flex;min-height:calc(100vh - 96px)}.barra-lateral{flex:0 0 245px;background:#fff;border-right:1px solid var(--borde);box-shadow:3px 0 12px #00000008}
+.usuario{min-height:94px;padding:20px 22px;display:flex;align-items:center;gap:13px;border-bottom:1px solid var(--borde)}
+.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#f3dba9;border:2px solid var(--dorado);font-weight:bold}
+.usuario strong,.usuario small{display:block}.usuario small{margin-top:5px;color:var(--gris);font-size:12px}
+.navegacion{padding:12px 10px;display:grid;gap:5px}.navegacion a{min-height:46px;padding:11px 13px;display:flex;align-items:center;gap:13px;border-radius:8px;color:#4b4c52;text-decoration:none;font-size:14px;line-height:1.35}
+.navegacion a:hover{background:#fbf3e3;color:var(--dorado2)}.navegacion a.activo-horarios,.navegacion a.activo-materias{background:var(--oscuro);color:var(--dorado);font-weight:bold}
+.navegacion a span{width:20px;text-align:center;font-size:18px}.contenido{flex:1;min-width:0;padding:28px}
+select{min-width:150px;padding:11px 34px 11px 13px;border:1px solid #d7d8de;border-radius:8px;background:#fff;color:var(--texto);font:inherit;cursor:pointer;outline:none}
+select:focus{border-color:var(--dorado);box-shadow:0 0 0 3px #e5a73525}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:800px){.encabezado{min-height:78px;padding:10px 16px}.marca-uleam img{width:48px;height:52px}.marca-thot img{width:48px;height:48px}.contenedor{min-height:calc(100vh - 78px)}.barra-lateral{flex-basis:180px}.contenido{padding:18px}}
+@media(max-width:560px){.contenedor{flex-direction:column}.barra-lateral{flex-basis:auto;border-right:0;border-bottom:1px solid var(--borde)}.usuario{min-height:auto;padding:12px 16px}.navegacion{display:flex;overflow-x:auto;padding:8px}.navegacion a{flex:0 0 auto}.contenido{padding:14px}.marca-uleam,.marca-thot{gap:9px;letter-spacing:1px}.marca-uleam span,.marca-thot span{font-size:21px}}
+
+.barra-filtros{min-height:72px;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:#fff;border:1px solid var(--borde);border-radius:14px;box-shadow:0 4px 16px #20212a08}
+.filtros-derecha{display:flex;gap:12px}.panel-horario{margin-top:22px;min-height:440px;padding:20px;background:#fff;border:1px solid var(--borde);border-radius:24px;box-shadow:0 7px 24px #20212a0b}
+.panel-interior{min-height:398px;overflow:hidden;border:1px solid #e8e1d4;border-radius:16px;background:#fffefa}
+.titulo-panel{padding:22px 26px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee7dc}.indicador{width:5px;height:29px;border-radius:5px;background:var(--dorado)}
+.titulo-panel h1{margin:0;color:var(--oscuro);font:24px Georgia,serif}.zona-horario{padding:24px 26px}.zona-horario p{margin:0 0 22px;color:var(--gris);font-size:14px}
+.mensaje-vacio{min-height:220px;padding:25px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;border:1px dashed #d9c69f;border-radius:13px;background:#fffaf0}
+.icono-calendario{color:var(--dorado2);font-size:32px}.mensaje-vacio strong{color:var(--oscuro);font-size:16px}.mensaje-vacio small{color:var(--gris);line-height:1.5}
+@media(max-width:800px){.barra-filtros{align-items:stretch;flex-direction:column}.filtros-derecha{flex-wrap:wrap}.barra-filtros label{flex:1}select{width:100%;min-width:0}}
+@media(max-width:560px){.panel-horario{padding:10px;min-height:350px}.titulo-panel,.zona-horario{padding:18px}}
