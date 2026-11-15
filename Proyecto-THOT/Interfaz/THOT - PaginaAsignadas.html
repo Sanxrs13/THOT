@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THOT | Materias asignadas</title>
+  <link rel="stylesheet" href="../Estilo/THOT - PaginaFacultad.css"><link rel="stylesheet" href="../Estilo/THOT - Comun.css">
+</head>
+<body>
+
+<header class="encabezado">
+  <div class="marca-uleam">
+    <img src="../Imagenes/logo_uleam_dorado.png" alt="Logo ULEAM">
+    <span>ULEAM</span>
+  </div>
+  <div class="marca-thot">
+    <span>THOT</span>
+    <img src="../Imagenes/logo_thot.png" alt="Logo THOT">
+  </div>
+</header>
+
+<div class="contenedor">
+
+<aside class="barra-lateral">
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Rol</small></div></div>
+  <nav class="navegacion">
+<a data-modulo="horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+<a data-modulo="materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+<a data-modulo="usuarios" href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
+<a data-modulo="carreras" href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+<a data-modulo="facultades" href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a>
+<a data-modulo="espacios" href="THOT - PaginaEspacio.html"><span>⌂</span>Espacios</a>
+<a data-modulo="asignadas" href="THOT - PaginaAsignadas.html" class="activo"><span>☷</span>Ver materias<br>asignadas</a>
+<a href="#" id="cerrar-sesion"><span>⎋</span>Cerrar sesión</a>
+</nav>
+</aside>
+
+  <main class="contenido">
+<div class="titulo-pagina"><span class="linea-dorada"></span><div><h1 id="titulo-pag">Materias asignadas</h1><p id="sub-pag">Materias con docente, horario y espacio asignados</p></div></div>
+<div class="columnas" style="grid-template-columns:minmax(0,1fr)">
+<section class="panel listado-panel">
+<div class="cabecera-listado"><div><label>HORARIOS ACADÉMICOS</label><h2>Asignaciones</h2><p>Ordenadas por día y hora</p></div></div>
+<div class="resumen-listado"><span>Total</span><strong id="contador">0 asignaciones</strong></div>
+<ul class="lista-registros" id="lista-asignadas"></ul>
+<div class="lista-vacia" id="lista-vacia"><strong>No hay materias asignadas</strong><small>Cuando se asignen materias aparecerán aquí.</small></div>
+</section>
+</div>
+</main>
+</div>
+<script src="thot-comun.js"></script>
+<script>
+(async () => {
+  let ses; try { ses = await THOT.iniciar("asignadas"); } catch (e) { return; }
+  const $ = id => document.getElementById(id);
+  const lista = $("lista-asignadas");
+  const esDocente = ses.rol === "Docente";
+  if (esDocente) {
+    $("titulo-pag").textContent = "Mis materias asignadas";
+    $("sub-pag").textContent = "Materias que tienes a tu cargo con su horario y aula";
+  }
+  const hh = n => String(n).padStart(2, "0") + ":00";
+  let datos = [];
+  try { datos = await THOT.get("/api/asignaciones/mias"); } catch (e) { THOT.error(e); }
+  datos.forEach(a => {
+    const detalle = [a.carreraNombre, a.semestre + " \"" + a.paralelo + "\"", a.periodo,
+      a.dia + " " + hh(a.horaInicio) + "–" + hh(a.horaFin), a.espacioDescripcion];
+    if (!esDocente) detalle.push("Docente: " + a.docenteNombre);
+    const li = THOT.fila("registro", "registro-info", a.materiaNombre, detalle.join(" · "), false);
+    lista.append(li);
+  });
+  $("contador").textContent = datos.length + (datos.length === 1 ? " asignación" : " asignaciones");
+  $("lista-vacia").hidden = datos.length > 0;
+})();
+</script>
+</body>
+</html>

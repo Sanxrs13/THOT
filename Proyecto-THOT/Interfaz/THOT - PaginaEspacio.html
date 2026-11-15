@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THOT | Espacios</title>
+  <link rel="stylesheet" href="../Estilo/THOT - PaginaFacultad.css"><link rel="stylesheet" href="../Estilo/THOT - Comun.css">
+</head>
+<body>
+
+<header class="encabezado">
+  <div class="marca-uleam">
+    <img src="../Imagenes/logo_uleam_dorado.png" alt="Logo ULEAM">
+    <span>ULEAM</span>
+  </div>
+  <div class="marca-thot">
+    <span>THOT</span>
+    <img src="../Imagenes/logo_thot.png" alt="Logo THOT">
+  </div>
+</header>
+
+<div class="contenedor">
+
+<aside class="barra-lateral">
+  <div class="usuario"><div class="avatar">U</div><div><strong>Usuario</strong><small>Rol</small></div></div>
+  <nav class="navegacion">
+<a data-modulo="horarios" href="THOT - PaginaHorario.html"><span>▦</span>Horarios</a>
+<a data-modulo="materias" href="THOT - PaginaMateria.html"><span>▤</span>Materias</a>
+<a data-modulo="usuarios" href="THOT - PaginaUsuario.html"><span>♙</span>Usuarios</a>
+<a data-modulo="carreras" href="THOT - PaginaCarrera.html"><span>▣</span>Carreras</a>
+<a data-modulo="facultades" href="THOT - PaginaFacultad.html"><span>▥</span>Facultades</a>
+<a data-modulo="espacios" href="THOT - PaginaEspacio.html" class="activo"><span>⌂</span>Espacios</a>
+<a data-modulo="asignadas" href="THOT - PaginaAsignadas.html"><span>☷</span>Ver materias<br>asignadas</a>
+<a href="#" id="cerrar-sesion"><span>⎋</span>Cerrar sesión</a>
+</nav>
+</aside>
+
+  <main class="contenido">
+<div class="titulo-pagina"><span class="linea-dorada"></span><div><h1>Gestión de espacios</h1><p>Administra las aulas y laboratorios disponibles</p></div></div>
+<div class="columnas">
+<section class="panel listado-panel">
+<div class="cabecera-listado"><div><label>REGISTROS ACADÉMICOS</label><h2>Lista de espacios</h2><p>Aulas y laboratorios registrados en el sistema</p></div>
+<button class="btn-agregar solo-gestion" id="btn-nuevo" type="button" title="Agregar espacio">+</button></div>
+<div class="resumen-listado"><span>Espacios disponibles</span><strong id="contador">0 espacios</strong></div>
+<ul class="lista-registros" id="lista-espacios"></ul>
+<div class="lista-vacia" id="lista-vacia"><strong>No hay espacios registrados</strong><small>Utiliza el botón + para agregar un aula o laboratorio.</small></div>
+</section>
+<section class="panel formulario-panel solo-gestion">
+<div class="cabecera"><div><label>GESTIÓN ACADÉMICA</label><h2 id="titulo-formulario">Agregar espacio</h2><p id="descripcion-formulario">Registra un aula o un laboratorio.</p></div><div class="icono-panel">✎</div></div>
+<form id="form-espacio">
+<div class="campo"><label for="tipo">Tipo de espacio</label><select id="tipo" required><option value="Aula">Aula</option><option value="Laboratorio">Laboratorio</option></select></div>
+<div class="campo"><label for="edificio">Código del edificio</label><input id="edificio" type="text" placeholder="Ej. B016" required></div>
+<div class="campo"><label for="aula">Código del aula (3 dígitos)</label><input id="aula" type="number" min="100" max="999" placeholder="Ej. 101" required></div>
+<div class="campo"><label for="capacidad">Capacidad (mínimo 30)</label><input id="capacidad" type="number" min="30" placeholder="Ej. 35" required></div>
+<div class="campo" id="campo-maquinas" hidden><label for="maquinas">Número de máquinas</label><input id="maquinas" type="number" min="1" placeholder="Al menos la mitad de la capacidad"></div>
+<div class="acciones-formulario"><button class="btn-principal" id="btn-guardar" type="submit">Guardar espacio</button><button class="btn-secundario" id="btn-cancelar" type="button" hidden>Cancelar edición</button></div>
+</form>
+<p class="nota-formulario">Un laboratorio debe tener al menos la mitad de máquinas respecto a su capacidad.</p>
+</section>
+</div>
+</main>
+</div>
+<script src="thot-comun.js"></script>
+<script>
+(async () => {
+  try { await THOT.iniciar("espacios"); } catch (e) { return; }
+  const gest = THOT.puede("espacios", "gestionar");
+  const $ = id => document.getElementById(id);
+  const form = $("form-espacio"), lista = $("lista-espacios");
+  let idEditando = null, espacios = [];
+
+  async function cargar() {
+    try { espacios = await THOT.get("/api/espacios"); } catch (e) { THOT.error(e); }
+    render();
+  }
+  function render() {
+    lista.innerHTML = "";
+    espacios.forEach(x => {
+      const li = THOT.fila("registro", "registro-info", x.descripcion, "Código: " + x.id, gest);
+      li.dataset.id = x.id;
+      lista.append(li);
+    });
+    $("contador").textContent = espacios.length + (espacios.length === 1 ? " espacio" : " espacios");
+    $("lista-vacia").hidden = espacios.length > 0;
+  }
+  function alternarMaquinas() {
+    const lab = $("tipo").value === "Laboratorio";
+    $("campo-maquinas").hidden = !lab;
+    $("maquinas").required = lab;
+  }
+  $("tipo").addEventListener("change", alternarMaquinas);
+  function resetForm() {
+    form.reset(); idEditando = null; alternarMaquinas();
+    $("titulo-formulario").textContent = "Agregar espacio";
+    $("descripcion-formulario").textContent = "Registra un aula o un laboratorio.";
+    $("btn-guardar").textContent = "Guardar espacio"; $("btn-cancelar").hidden = true;
+  }
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const cuerpo = {
+      tipo: $("tipo").value, codigoEdificio: $("edificio").value.trim(),
+      capacidad: Number($("capacidad").value), codigoAula: Number($("aula").value),
+      numeroMaquinas: $("tipo").value === "Laboratorio" ? Number($("maquinas").value) : null
+    };
+    try {
+      if (idEditando) await THOT.put("/api/espacios/" + encodeURIComponent(idEditando), cuerpo);
+      else await THOT.post("/api/espacios", cuerpo);
+    } catch (err) { THOT.error(err); return; }
+    resetForm(); cargar();
+  });
+  lista.addEventListener("click", async e => {
+    const item = e.target.closest(".registro"); if (!item) return;
+    const id = item.dataset.id, x = espacios.find(v => v.id === id);
+    if (e.target.classList.contains("btn-editar")) {
+      idEditando = id;
+      $("tipo").value = x.tipo; $("edificio").value = x.codigoEdificio; $("capacidad").value = x.capacidad;
+      $("aula").value = x.codigoAula; $("maquinas").value = x.numeroMaquinas || ""; alternarMaquinas();
+      $("titulo-formulario").textContent = "Editar espacio";
+      $("descripcion-formulario").textContent = "Modifica los datos del espacio seleccionado.";
+      $("btn-guardar").textContent = "Guardar cambios"; $("btn-cancelar").hidden = false;
+    }
+    if (e.target.classList.contains("btn-eliminar") && confirm("¿Eliminar " + x.descripcion + "?")) {
+      try { await THOT.del("/api/espacios/" + encodeURIComponent(id)); } catch (err) { THOT.error(err); return; }
+      if (idEditando === id) resetForm();
+      cargar();
+    }
+  });
+  $("btn-nuevo").addEventListener("click", () => { resetForm(); $("edificio").focus(); });
+  $("btn-cancelar").addEventListener("click", resetForm);
+  alternarMaquinas();
+  cargar();
+})();
+</script>
+</body>
+</html>
