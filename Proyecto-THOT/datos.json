@@ -1,0 +1,146 @@
+{
+  "facultades": [
+    {
+      "nombre": "Facultad de Ciencias de la Vida y Tecnologias",
+      "codigo": "FC-01"
+    },
+    {
+      "nombre": "Facultad de Ciencias de la Salud",
+      "codigo": "FC-02"
+    },
+    {
+      "nombre": "Facultad de Ciencias Administrativas, Contables y Comercio",
+      "codigo": "FC-03"
+    },
+    {
+      "nombre": "Facultad de Educación, Turismo, Artes y Humanidades",
+      "codigo": "FC-04"
+    },
+    {
+      "nombre": "Facultad de Ingeniería, Industria y Arquitectura",
+      "codigo": "FC-05"
+    },
+    {
+      "nombre": "Facultad de Ciencias Sociales, Derecho y Bienestar",
+      "codigo": "FC-06"
+    },
+    {
+      "nombre": "Facultad de Artes, Humanidades y Patrimonio",
+      "codigo": "FC-07"
+    }
+  ],
+  "carreras": [
+    {
+      "nombre": "Ingenieria en Software",
+      "codigo": "CT01",
+      "facultad": "FC-01"
+    },
+    {
+      "nombre": "Tecnologias de la Informacion",
+      "codigo": "CT02",
+      "facultad": "FC-01"
+    },
+    {
+      "nombre": "Agronegocios",
+      "codigo": "CT03",
+      "facultad": "FC-01"
+    }
+  ],
+  "usuarios": [
+    {
+      "tipo": "Administrador",
+      "cedula": "1300000001",
+      "nombre": "Administrador THOT",
+      "nivel": "Primero",
+      "carrera": "CT01",
+      "clave_hash": "5f1f0d8cfac73b1b15ba03044b7ccaa0$605b80323a3d088f1ac4c7d6c4fd6d48aafd31d14c516669361c3f479d95af97"
+    },
+    {
+      "tipo": "Director",
+      "cedula": "1300000002",
+      "nombre": "Dylan Director",
+      "nivel": "Primero",
+      "carrera": "CT01",
+      "clave_hash": "ba8a20465afe338afdd4b2558111a2c8$3f4ecf123d0c8a98f09ab92151106f473e64bba2c9d12cc31756669c7f18bdbd"
+    },
+    {
+      "tipo": "Presidente",
+      "cedula": "1300000003",
+      "nombre": "Orly Presidente",
+      "nivel": "Primero",
+      "carrera": "CT01",
+      "clave_hash": "62406e770f6fd9c49a9a8fc6e37ce8d9$9995173c2dd7445d24a71e597486ec5bca18c3d11358aa4d72f67ff832c3f0fb"
+    },
+    {
+      "tipo": "Docente",
+      "cedula": "1300000004",
+      "nombre": "Anthony Docente",
+      "nivel": "Primero",
+      "carrera": "CT01",
+      "clave_hash": "7da41447b81db76ec61196c1945b8336$26e40df9d3fd886c24b5513513ebe2ed07c13c3c544914a590979b2e80cf9352"
+    },
+    {
+      "tipo": "Docente",
+      "cedula": "1300000006",
+      "nombre": "Docente",
+      "nivel": "Primero",
+      "carrera": "CT01",
+      "clave_hash": "61fb134d404b210d477b140583a594ce$cb1d7b5f74e9a5da0ee333240af6eb667bb46f876cba482c2aadaba91a5ee51b"
+    },
+    {
+      "tipo": "Estudiante",
+      "cedula": "1300000005",
+      "nombre": "Ana Estudiante",
+      "nivel": "Tercero",
+      "carrera": "CT01",
+      "clave_hash": "17d9b1d23e8e5309dea7938f78af661a$5d248ac092cd57de43bae63c6b2db94d664a157e9e522b1ef3002c51f1c35ee2"
+    }
+  ],
+  "espacios": [
+    {
+      "tipo": "Aula",
+      "codigo_edificio": "A",
+      "capacidad": 35,
+      "codigo_aula": 101
+    },
+    {
+      "tipo": "Laboratorio",
+      "codigo_edificio": "B",
+      "capacidad": 40,
+      "codigo_aula": 201,
+      "numero_maquinas": 25
+    },
+    {
+      "tipo": "Aula",
+      "codigo_edificio": "A",
+      "capacidad": 40,
+      "codigo_aula": 102
+    }
+  ],
+  "materias": [
+    {
+      "nombre": "Programacion Estructurada",
+      "codigo": "PRG-101",
+      "creditos": 4,
+      "carrera": "CT01",
+      "usar_lab": true
+    },
+    {
+      "nombre": "Base de Datos",
+      "codigo": "BDD-102",
+      "creditos": 4,
+      "carrera": "CT01",
+      "usar_lab": true
+    },
+    {
+      "nombre": "Redes de Computadoras",
+      "codigo": "RED-103",
+      "creditos": 3,
+      "carrera": "CT01",
+      "usar_lab": false
+    }
+  ],
+  "cursos": [],
+  "horarios": [],
+  "asignaciones": []
+}
