@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Entra al sitio | THOT</title>
-		<loink rel="icon" href="../imagenes/Logo-uleam.png">
-		<link rel="stylesheet" type="text/css" href="../estilo/THOT - InicioSesison.css">
+		<link rel="icon" href="../Imagenes/Logo-uleam.png">
+		<link rel="stylesheet" type="text/css" href="../Estilo/THOT - InicioSesison.css">
 		
 	</head>
 
@@ -15,7 +15,7 @@
 			<header id="cabezera">
 				<section id="cabezera_principal">
 					<div id="cabeza_izquierda">
-						<img src="../imagenes/logo_uleam_dorado.png" id="logo">
+						<img src="../Imagenes/logo_uleam_dorado.png" id="logo">
 						<div id="pagina_principal">
 							<H2 id="texto_cabezera"><strong>ULEAM</strong> </H2>
 						</div>
@@ -24,7 +24,7 @@
 						<div id="pagina_principal">
 							<H2 id="texto_cabezera"><strong>THOT</strong> </H2>
 						</div>
-						<img src="../imagenes/logo_thot.png" id="logo">
+						<img src="../Imagenes/logo_thot.png" id="logo">
 					</div>
 				</section>
 			</header>
@@ -36,9 +36,10 @@
     				    <h2 id="titulo">Inicio de sesión</h2>
 
     				    <form id="formulario_login" method="post">
-    				        <input type="text" id="usuario" placeholder="Usuario" required>
+    				        <input type="text" id="usuario" placeholder="Cédula o correo (1234567890@uleam.com)" autocomplete="username" required>
     				        <br>
-    				        <input type="password" id="contrasena"placeholder="Ingrese su contraseña" required>
+    				        <input type="password" id="contrasena" placeholder="Ingrese su contraseña" autocomplete="current-password" required>
+<p id="mensaje_login" role="alert"></p>
     				        <br>
 							<a id="recuperar" href="#">¿Olvidó su contraseña?</a>
 							<br>
@@ -63,11 +64,29 @@
 			<footer id="pie">
 				<section id="pie_pagina">
 					<div id="pie_izquierda">
-						<img src="../imagenes/LOGO-ULEAM-H2.png" id="logo_pie">
+						<img src="../Imagenes/LOGO-ULEAM-H2.png" id="logo_pie">
 					</div>
 
 				</section>		
 			</footer>
 		</div>
-	</body>
+	<script src="thot-comun.js"></script>
+<script>
+document.getElementById("formulario_login").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = document.getElementById("mensaje_login"), boton = document.getElementById("boton_entrar");
+  msg.textContent = ""; boton.disabled = true;
+  try {
+    const r = await THOT.post("/api/login", {
+      usuario: document.getElementById("usuario").value.trim(),
+      contrasena: document.getElementById("contrasena").value
+    });
+    location.href = r.paginaInicial;
+  } catch (err) {
+    msg.textContent = err.message;
+    boton.disabled = false;
+  }
+});
+</script>
+</body>
 </html>
